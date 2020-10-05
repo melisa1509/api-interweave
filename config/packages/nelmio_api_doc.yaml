@@ -1,0 +1,9 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: Interweave Lms
+            description: Learning Management System Interweave
+            version: 1.0.0
+    routes: # to filter documented routes
+        path_patterns:
+            - ^/(?!/doc$) # Accepts routes under /api except /api/doc
