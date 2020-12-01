@@ -656,7 +656,7 @@ class UserController extends FOSRestController
 
         $subject = $this->getParameter("subject.change_password_".$user->getLanguage());
         $subjectEmail = $subject;
-        $bodyEmail = "https://".$_SERVER['SERVER_NAME']."/user/editpassword/".$user->getId();
+        $bodyEmail = "https://academy.interweavesolutions.org/user/editpassword/".$user->getId();
         //$bodyEmail = "http://localhost:3000/user/newpassword/".$user->getId();
 
         $message = (new \Swift_Message($subjectEmail))

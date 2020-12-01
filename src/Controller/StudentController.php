@@ -486,7 +486,41 @@ class StudentController extends FOSRestController
                                 'quality'     => $quality."%",
                                 'service'     => $service."%"
                                 );
-                            }                            
+                            }
+                            else{
+                                if($programMbs->getState() == "state.approved"){
+                                    $progressMbs      = array(
+                                        'id'          => $programMbs->getId(),
+                                        'state'       => "edit",
+                                        'complete'    =>  true,
+                                        'submitted'   => "state.approved",
+                                        'plan'        => "100%",
+                                        'product'     => "100%",
+                                        'process'     => "100%",
+                                        'price'       => "100%",
+                                        'promotion'   => "100%",
+                                        'paperwork'   => "100%",
+                                        'quality'     => "100%",
+                                        'service'     => "100%",
+                                    );
+                                }
+                                else{
+                                    $progressMbs      = array(
+                                        'id'          => $programMbs->getId(),
+                                        'state'       => "new",
+                                        'complete'    => "false",
+                                        'submitted'   => "state.not_started",
+                                        'plan'        => "0%",
+                                        'product'     => "0%",
+                                        'process'     => "0%",
+                                        'price'       => "0%",
+                                        'promotion'   => "0%",
+                                        'paperwork'   => "0%",
+                                        'quality'     => "0%",
+                                        'service'     => "0%",
+                                    );
+                                }
+                            }                              
                         }
                         else{
                             $progressMbs[] = array(
@@ -717,7 +751,42 @@ class StudentController extends FOSRestController
                                 'quality'     => $quality."%",
                                 'service'     => $service."%"
                                 );
-                            }                            
+                            }
+                            else{
+                                if($programMbs->getState() == "state.approved"){
+                                    $progressMbs      = array(
+                                        'id'          => $programMbs->getId(),
+                                        'state'       => "edit",
+                                        'complete'    =>  true,
+                                        'submitted'   => "state.approved",
+                                        'plan'        => "100%",
+                                        'product'     => "100%",
+                                        'process'     => "100%",
+                                        'price'       => "100%",
+                                        'promotion'   => "100%",
+                                        'paperwork'   => "100%",
+                                        'quality'     => "100%",
+                                        'service'     => "100%",
+                                    );
+                                }
+                                else{
+                                    $progressMbs      = array(
+                                        'id'          => $programMbs->getId(),
+                                        'state'       => "new",
+                                        'complete'    => "false",
+                                        'submitted'   => "state.not_started",
+                                        'plan'        => "0%",
+                                        'product'     => "0%",
+                                        'process'     => "0%",
+                                        'price'       => "0%",
+                                        'promotion'   => "0%",
+                                        'paperwork'   => "0%",
+                                        'quality'     => "0%",
+                                        'service'     => "0%",
+                                    );
+                                }
+                            }
+                                                        
                         }
                         else{
                             $progressMbs      = array(

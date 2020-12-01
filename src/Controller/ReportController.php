@@ -222,6 +222,8 @@ class ReportController extends FOSRestController
           $globalMbs = 0;
           $globalMbsJr = 0;
           $globalSa = 0; 
+          $globalParticipants = 0;
+          $globalGroups = 0;
 
           $role = $request->request->get("role");
           $id_ambassador = $request->request->get("id");
@@ -245,10 +247,17 @@ class ReportController extends FOSRestController
           }
           else if($role == "ROLE_EMBASSADOR" or $role == "ROLE_STUDENT_EMBASSADOR"){
               $studentsMbs = $em->getRepository('App:StudentGroup')->studentsMbsStateByEmbassador($id_ambassador, 'state.approved');
+              $studentsSa = $em->getRepository('App:StudentGroup')->studentsAmbassadorStateByEmbassador($id_ambassador, 'state.approved');
               $studentsJr = $em->getRepository('App:StudentGroup')->studentsMbsStateByEmbassadorProgram($id_ambassador, 'state.approved', 'option.program4');
+              $participantsMbs = $em->getRepository('App:StudentGroup')->studentsMbsByEmbassador($id_ambassador);
+              $groups = $em->getRepository('App:Groupe')->findBy(array("embassador" => $id_ambassador));
 
               $globalMbs = count($studentsMbs);
               $globalMbsJr = count($studentsJr);
+              $globalSa = count($studentsSa);
+
+              $globalParticipants = count($participantsMbs);
+              $globalGroups = count($groups);
           }
 
           $date1 = new \DateTime("2018-12-15");
@@ -259,6 +268,9 @@ class ReportController extends FOSRestController
               'global_mbs'          => $globalMbs - $globalMbsJr,
               'global_mbs_junior'   => $globalMbsJr,
               'global_sa'           => $globalSa,
+              'global_participants' => $globalParticipants,
+              'global_groups'       => $globalGroups,
+              'global_certificates' => $globalMbs,
               'date_range'           => $this->getFormat($diff),                  
           ];
 

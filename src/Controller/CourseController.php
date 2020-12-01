@@ -103,6 +103,15 @@ class CourseController extends FOSRestController
      *     description="Course was not successfully registered"
      * )
      *
+     * 
+     * @SWG\Parameter(
+     *     name="user",
+     *     in="body",
+     *     type="integer",
+     *     description="The user id",
+     *     schema={}
+     * )
+     * 
      * @SWG\Parameter(
      *     name="state",
      *     in="body",
@@ -133,12 +142,12 @@ class CourseController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
  
         $message = "";
-        $user = $this->getUser();
+        //$user = $this->getUser();
         $course=new Course();
         //Create a form
         $form=$this->createForm(CourseType::class, $course);
         $form->submit($request->request->all());
-        $course->setUser($user);
+        //$course->setUser($user);
         
         try {
             $code = 200;

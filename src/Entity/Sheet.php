@@ -58,6 +58,13 @@ class Sheet
      */
     private $content;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="position", type="integer")
+     */
+    private $position;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -119,6 +126,18 @@ class Sheet
     public function setUnit(?Unit $unit): self
     {
         $this->unit = $unit;
+
+        return $this;
+    }
+
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): self
+    {
+        $this->position = $position;
 
         return $this;
     }  

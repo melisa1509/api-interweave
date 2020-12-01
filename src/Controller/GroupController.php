@@ -233,7 +233,7 @@ class GroupController extends FOSRestController
 
             $requestStartDate = strtotime($request->request->get('startDate'));
             $formatStartDate = date('Y-m-d', $requestStartDate);
-            $group->setStartDate(new \DateTime($formatFinalDate, (new \DateTimeZone('America/New_York'))));
+            $group->setStartDate(new \DateTime($formatStartDate, (new \DateTimeZone('America/New_York'))));
 
             $requestGraduationDate = strtotime($request->request->get('graduationDate'));
             $formatGraduationDate = date('Y-m-d', $requestGraduationDate);
@@ -424,7 +424,7 @@ class GroupController extends FOSRestController
 
                 $requestStartDate = strtotime($request->request->get('startDate'));
                 $formatStartDate = date('Y-m-d', $requestStartDate);
-                $group->setStartDate(new \DateTime($formatFinalDate, (new \DateTimeZone('America/New_York'))));
+                $group->setStartDate(new \DateTime($formatStartDate, (new \DateTimeZone('America/New_York'))));
 
                 $requestGraduationDate = strtotime($request->request->get('graduationDate'));
                 $formatGraduationDate = date('Y-m-d', $requestGraduationDate);

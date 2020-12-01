@@ -16,6 +16,7 @@ class SheetEditType extends AbstractType
       ->add('state')
       ->add('description')
       ->add('content')
+      ->add('position')
       
     ;
   }

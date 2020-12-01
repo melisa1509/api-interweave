@@ -142,6 +142,14 @@ class SheetController extends FOSRestController
      *     schema={}
      * )
      * 
+     * @SWG\Parameter(
+     *     name="order",
+     *     in="body",
+     *     type="integer",
+     *     description="The order of the sheet",
+     *     schema={}
+     * )
+     * 
      * @SWG\Tag(name="Sheet")
      */ 
 
@@ -154,7 +162,7 @@ class SheetController extends FOSRestController
         //Create a form
         $form=$this->createForm(SheetType::class, $sheet);
         $form->submit($request->request->all());
-        $unitId= $request->request->get("unit_id", null);
+        $unitId= $request->request->get("unit_id");
         $unit = $em->getRepository("App:Unit")->find($unitId);
         $sheet->setUnit($unit);
 
@@ -254,6 +262,54 @@ class SheetController extends FOSRestController
      *     in="path",
      *     type="string",
      *     description="The Sheet ID"
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="name",
+     *     in="body",
+     *     type="string",
+     *     description="The name",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="state",
+     *     in="body",
+     *     type="string",
+     *     description="The state",
+     *     schema={}
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="unit_id",
+     *     in="body",
+     *     type="string",
+     *     description="The Unit id of the new Sheet",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="description",
+     *     in="body",
+     *     type="string",
+     *     description="The description",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="content",
+     *     in="body",
+     *     type="string",
+     *     description="The content",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="order",
+     *     in="body",
+     *     type="integer",
+     *     description="The order of the sheet",
+     *     schema={}
      * )
      *
      * @SWG\Tag(name="Sheet")
