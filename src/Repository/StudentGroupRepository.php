@@ -23,6 +23,25 @@ class StudentGroupRepository extends EntityRepository
       }
   }
 
+  public function successStoryByEmbassador($embassador_id)
+  {
+      $query = $this->getEntityManager()
+          ->createQuery(
+          'SELECT s, g FROM App:StudentGroup s
+           JOIN s.group g
+           JOIN s.student st
+           JOIN st.programmbs p
+           WHERE g.embassador = :id
+           AND p.history1 IS NOT NULL'
+      )->setParameter('id', $embassador_id);
+
+      try {
+          return $query->getResult();
+      } catch (\Doctrine\ORM\NoResultException $exception) {
+          return null;
+      }
+  }
+
   public function studentMbsByState($state)
   {
     $query = $this->getEntityManager()

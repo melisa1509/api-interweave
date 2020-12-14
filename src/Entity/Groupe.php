@@ -116,7 +116,7 @@ class Groupe
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="groupes")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     * @Groups({"future_ambassador", "group_list"})
+     * @Groups({"future_ambassador", "group_list", "student_list", "student_group"})
      * 
      */
     private $embassador;
