@@ -290,6 +290,134 @@ class ReportController extends FOSRestController
       return new Response($serializer->serialize($response, "json"));
   }
 
+   /**
+     * @Rest\Post("/ambassadorstatistics", name="ambassador_statistics")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Gets all report of Ambassador."
+     * )  
+     *     
+    * @SWG\Parameter(
+     *     name="id_ambassador",
+     *     in="path",
+     *     type="string",
+     *     description="The id of Ambassador"
+     * )   
+     * 
+     * @SWG\Tag(name="Report")
+     */
+    public function ambassadorStatisticsAction(Request $request) {
+      $serializer = $this->get('jms_serializer');
+      $em = $this->getDoctrine()->getManager();
+      $statistics = [];
+      $message = "";
+
+      try {
+          $code = 200;
+          $error = false;
+
+          $id_ambassador = $request->request->get("id_ambassador");
+
+          $ambassador = $em->getRepository('App:User')->find($id_ambassador);
+
+          $participantsMbs = $em->getRepository('App:StudentGroup')->studentsMbsByEmbassador($ambassador->getId());
+          $certificates = $em->getRepository('App:StudentGroup')->studentsMbsStateByEmbassador($ambassador->getId(), 'state.approved');
+          $groups = $em->getRepository('App:Groupe')->findBy(array("embassador" => $ambassador->getId()));
+          $stories = $em->getRepository('App:StudentGroup')->successStoryByEmbassador($ambassador->getId());
+
+          $statistics = [
+            'id' => $ambassador->getId(),
+            'first_name' => $ambassador->getFirstName(),
+            'last_name' => $ambassador->getLastName(),
+            'participants' => count($participantsMbs),
+            'certificates' => count($certificates),
+            'groups'=> count($groups),
+            'stories'=> count($stories)
+          ];
+
+         
+
+
+      } catch (Exception $ex) {
+          $code = 500;
+          $error = true;
+          $message = "An error has occurred trying to get all report - Error: {$ex->getMessage()}";
+      }
+
+      $response = [
+          'code' => $code,
+          'error' => $error,
+          'data' => $code == 200 ? $statistics : $message,
+      ];
+
+      return new Response($serializer->serialize($response, "json"));
+  }
+
+  /**
+     * @Rest\Get("/listambassadorstatistics", name="list_ambassador_statistics")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Gets all report of Ambassador."
+     * )  
+     *     
+     *
+     * @SWG\Tag(name="Report")
+     */
+    public function listAmbassadorStatisticsAction(Request $request) {
+      $serializer = $this->get('jms_serializer');
+      $em = $this->getDoctrine()->getManager();
+      $reports = [];
+      $message = "";
+
+      try {
+          $code = 200;
+          $error = false;
+
+          $globalMbs = 0;
+          $globalMbsJr = 0;
+          $globalSa = 0; 
+          $globalParticipants = 0;
+          $globalGroups = 0;
+
+          $ambassadors = $em->getRepository('App:User')->userByRole("ROLE_EMBASSADOR");
+
+          foreach ($ambassadors as $key => $ambassador) {
+              $participantsMbs = $em->getRepository('App:StudentGroup')->studentsMbsByEmbassador($ambassador->getId());
+              $certificates = $em->getRepository('App:StudentGroup')->studentsMbsStateByEmbassador($ambassador->getId(), 'state.approved');
+              $groups = $em->getRepository('App:Groupe')->findBy(array("embassador" => $ambassador->getId()));
+              $stories = $em->getRepository('App:StudentGroup')->successStoryByEmbassador($ambassador->getId());
+
+              $statistics[] = array(
+                'id' => $ambassador->getId(),
+                'first_name' => $ambassador->getFirstName(),
+                'last_name' => $ambassador->getLastName(),
+                'participants' => count($participantsMbs),
+                'certificates' => count($certificates),
+                'groups'=> count($groups),
+                'stories'=> count($stories)
+              );
+          }
+
+         
+
+
+      } catch (Exception $ex) {
+          $code = 500;
+          $error = true;
+          $message = "An error has occurred trying to get all report - Error: {$ex->getMessage()}";
+      }
+
+      $response = [
+          'code' => $code,
+          'error' => $error,
+          'data' => $code == 200 ? $statistics : $message,
+      ];
+
+      return new Response($serializer->serialize($response, "json"));
+  }
+
     /**
      * @Rest\Get("/ambassador/{id}.{_format}", name="report_ambassador", defaults={"_format":"json"})
      *

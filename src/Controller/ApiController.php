@@ -186,6 +186,8 @@ class ApiController extends FOSRestController
             $error = false;
  
             $user = $this->getUser();
+            $em->persist($user);
+            $em->flush();
             
  
         } catch (Exception $ex) {

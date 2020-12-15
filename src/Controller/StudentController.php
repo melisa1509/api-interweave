@@ -1575,5 +1575,71 @@ class StudentController extends FOSRestController
         return new Response($serializer->serialize($response, "json", SerializationContext::create()->setGroups(array('future_ambassador'))));
     }
 
+    /**
+     * @Rest\Post("/successstorylist", name="success_story_list")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Gets all available success stories."
+     * )
+     *
+     * @SWG\Response(
+     *     response=500,
+     *     description="An error has occurred trying to get all success stories."
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="id_ambassador",
+     *     in="path",
+     *     type="string",
+     *     description="The ID of Ambassador"
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="role",
+     *     in="path",
+     *     type="string",
+     *     description="The role of user"
+     * )
+     *
+     *
+     * @SWG\Tag(name="Student")
+     */
+    public function SuccessStorylistAction(Request $request) {
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $students = [];
+        $message = "";
+ 
+        try {
+            $code = 200;
+            $error = false;
+ 
+            $role = $request->request->get('role');
+            $id = $request->request->get('id_ambassador');
+
+            if($role == 'ROLE_ADMIN' or $role == 'ROLE_LANGUAGE_ADMIN'){
+                $students = $em->getRepository('App:StudentGroup')->listSuccessStory();
+            }
+            else if($role == 'ROLE_EMBASSADOR' or $role == 'ROLE_STUDENT_EMBASSADOR'){
+                $students = $em->getRepository('App:StudentGroup')->successStoryByEmbassador($id);
+            }
+          
+ 
+        } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to get all SuccessStory - Error: {$ex->getMessage()}";
+        }
+ 
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $code == 200 ? $students : $message,
+        ];
+ 
+        return new Response($serializer->serialize($response, "json", SerializationContext::create()->setGroups(array("student_group"))));
+    }
+
     
 }

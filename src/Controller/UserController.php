@@ -509,6 +509,9 @@ class UserController extends FOSRestController
             $user = $this->getUser();
             $em = $this->getDoctrine()->getManager();
             $user = $em->getRepository("App:User")->find($user->getId());
+            $user->setUpdatedAt(new \DateTime('NOW'));
+            $em->persist($user);
+            $em->flush();
             
             
  

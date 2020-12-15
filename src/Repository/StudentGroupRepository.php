@@ -42,6 +42,24 @@ class StudentGroupRepository extends EntityRepository
       }
   }
 
+  public function listSuccessStory()
+  {
+      $query = $this->getEntityManager()
+          ->createQuery(
+          'SELECT s, g FROM App:StudentGroup s
+           JOIN s.group g
+           JOIN s.student st
+           JOIN st.programmbs p
+           WHERE p.history1 IS NOT NULL'
+      );
+
+      try {
+          return $query->getResult();
+      } catch (\Doctrine\ORM\NoResultException $exception) {
+          return null;
+      }
+  }
+
   public function studentMbsByState($state)
   {
     $query = $this->getEntityManager()
