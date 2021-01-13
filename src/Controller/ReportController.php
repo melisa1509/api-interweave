@@ -251,10 +251,12 @@ class ReportController extends FOSRestController
               $studentsJr = $em->getRepository('App:StudentGroup')->studentsMbsStateByEmbassadorProgram($id_ambassador, 'state.approved', 'option.program4');
               $participantsMbs = $em->getRepository('App:StudentGroup')->studentsMbsByEmbassador($id_ambassador);
               $groups = $em->getRepository('App:Groupe')->findBy(array("embassador" => $id_ambassador));
+              $stories = $em->getRepository('App:StudentGroup')->successStoryByEmbassador($id_ambassador);
 
               $globalMbs = count($studentsMbs);
               $globalMbsJr = count($studentsJr);
               $globalSa = count($studentsSa);
+              $globalStories = count($stories);
 
               $globalParticipants = count($participantsMbs);
               $globalGroups = count($groups);
@@ -271,6 +273,7 @@ class ReportController extends FOSRestController
               'global_participants' => $globalParticipants,
               'global_groups'       => $globalGroups,
               'global_certificates' => $globalMbs,
+              'global_stories'      => $globalStories,
               'date_range'           => $this->getFormat($diff),                  
           ];
 
