@@ -708,6 +708,18 @@ class ProgramMbs
      */
     private $productImage;
 
+    /**
+     * @ORM\Column(name="created_at", type="datetime")
+     * @Groups({"student_list"})
+     */
+    protected $createdAt;
+
+    /**
+     * @ORM\Column(name="updated_at", type="datetime")
+     * @Groups({"student_list"})
+     */
+    protected $updatedAt;
+
 
     /**
      * Get id
@@ -3021,5 +3033,46 @@ class ProgramMbs
     public function getProductImage()
     {
         return $this->productImage;
+    }
+
+     /**
+     * @param mixed $updatedAt
+     * @return self
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        $dateTimeNow = new DateTime('now');
+        $this->setUpdatedAt($dateTimeNow);
+        if ($this->getCreatedAt() === null) {
+            $this->setCreatedAt($dateTimeNow);
+        }
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
     }
 }

@@ -187,25 +187,7 @@ class StudentGroupRepository extends EntityRepository
       }
   }
 
-  public function studentsByGroup($group_id)
-  {
-      $query = $this->getEntityManager()
-          ->createQuery(
-          'SELECT s, g FROM App:StudentGroup s
-           JOIN s.group g
-           WHERE g.id = :id'
-      )->setParameters(array(
-        'id' => $group_id
-      ));
-
-      try {
-          return $query->getResult();
-      } catch (\Doctrine\ORM\NoResultException $exception) {
-          return null;
-      }
-  }
-
-  public function studentsDiferentStateByGroup($group_id, $state)
+  public function studentsMbsDifferentStateByGroup($group_id, $state)
   {
       $query = $this->getEntityManager()
           ->createQuery(
@@ -226,6 +208,69 @@ class StudentGroupRepository extends EntityRepository
           return null;
       }
   }
+
+  public function studentsByGroup($group_id)
+  {
+      $query = $this->getEntityManager()
+          ->createQuery(
+          'SELECT s, g FROM App:StudentGroup s
+           JOIN s.group g
+           WHERE g.id = :id'
+      )->setParameters(array(
+        'id' => $group_id
+      ));
+
+      try {
+          return $query->getResult();
+      } catch (\Doctrine\ORM\NoResultException $exception) {
+          return null;
+      }
+  }
+
+  public function studentsDifferentStateByGroup($group_id, $state)
+  {
+      $query = $this->getEntityManager()
+          ->createQuery(
+          'SELECT s, g FROM App:StudentGroup s
+           JOIN s.group g
+           JOIN s.student st
+           JOIN st.programmbs p
+           WHERE g.id = :id
+           AND p.state != :state'
+      )->setParameters(array(
+        'id' => $group_id,
+        'state' => $state
+      ));
+
+      try {
+          return $query->getResult();
+      } catch (\Doctrine\ORM\NoResultException $exception) {
+          return null;
+      }
+  }
+
+  /**
+    * @param string $role
+    *
+    * @return array
+    */
+    public function studentsDifferentS3333tateByGroup($group_id, $state)
+    {
+       $qb = $this->_em->createQueryBuilder();
+       $qb->select('s')
+           ->from('App:StudentGroup', 's')
+           ->join('s.group', 'g')
+           ->join('s.student', 'st')
+           ->join('st.programmbs', 'p')
+           ->where('g.id = :id')
+           ->andWhere('p.state = :state')
+           ->setParameters(array(
+             'id'        => $group_id,
+             'state'     => $state,
+           ));
+
+       return $qb->getQuery()->getResult();
+    }
 
   public function studentsMbsStateByLanguage($lang, $state)
   {
