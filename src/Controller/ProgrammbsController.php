@@ -304,6 +304,12 @@ class ProgrammbsController extends FOSRestController
                 $error = true;
                 $message = "The Programmbs does not exist";
             }
+            else{
+                $cvDir = $this->container->getparameter('kernel.project_dir').'/web/file/'.$programmbs->getHistory2();
+                if(!file_exists($cvDir) || $programmbs->getHistory2() == ""){
+                    $programmbs->setHistory2("undefined");
+                }
+            }
             
  
         } catch (Exception $ex) {
