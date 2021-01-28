@@ -144,6 +144,7 @@ class ReportController extends FOSRestController
               }                  
               $topNumbers[] = array(
                   'code' => $mbs->getCountry(),
+                  'flag' => $this->getParameter($mbs->getCountry()),
                   'country' => $this->getParameter($this->getParameter($mbs->getCountry())),
                   'mbs'=> $mbs->getNumber(),
                   'jr'=> $jrNumber,
@@ -152,6 +153,7 @@ class ReportController extends FOSRestController
 
               $vectorMap[] = array(
                 'code' => $mbs->getCountry(),
+                'flag' => $this->getParameter($mbs->getCountry()),
                 'country' => $this->getParameter($this->getParameter($mbs->getCountry())),
                 'mbs'=> $mbs->getNumber(),
                 'jr'=> $jrNumber,
