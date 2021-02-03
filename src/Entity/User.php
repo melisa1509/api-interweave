@@ -126,6 +126,12 @@ class User implements UserInterface
    private $groupes;
 
    /**
+    * @ORM\OneToMany(targetEntity="App\Entity\Grant", mappedBy="embassador")
+    * @Serializer\Exclude()
+    */
+    private $grants;
+
+   /**
     * @ORM\OneToOne(targetEntity="App\Entity\StudentGroup", mappedBy="student")
     * @Groups({"future_ambassador", "student_list", "student_group"})
     */
@@ -176,6 +182,7 @@ class User implements UserInterface
     {
         $this->boards = new ArrayCollection();
         $this->groupes = new ArrayCollection();
+        $this->grants = new ArrayCollection();
     }
 
     /**
@@ -565,6 +572,37 @@ class User implements UserInterface
         $newStudent = null === $programsa ? null : $this;
         if ($programsa->getStudent() !== $newStudent) {
             $programsa->setStudent($newStudent);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Grant[]
+     */
+    public function getGrants(): Collection
+    {
+        return $this->grants;
+    }
+
+    public function addGrant(Grant $grant): self
+    {
+        if (!$this->grants->contains($grant)) {
+            $this->grants[] = $grant;
+            $grant->setEmbassador($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGrant(Grant $grant): self
+    {
+        if ($this->grants->contains($grant)) {
+            $this->grants->removeElement($grant);
+            // set the owning side to null (unless already changed)
+            if ($grant->getEmbassador() === $this) {
+                $grant->setEmbassador(null);
+            }
         }
 
         return $this;

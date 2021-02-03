@@ -13,7 +13,7 @@ use JMS\Serializer\Annotation\Groups;
 /**
  * Grant
  *
- * @ORM\Table(name="grant")
+ * @ORM\Table(name="`grant`")
  * @ORM\Entity(repositoryClass="App\Repository\GrantRepository")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -55,27 +55,29 @@ class Grant
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="grants")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     * @Groups({"future_ambassador", "group_list", "student_list", "student_group"})
      * 
      */
     private $embassador;
 
     /**
+    * @ORM\OneToMany(targetEntity="App\Entity\GrantUpdate", mappedBy="grant")
+    * @Serializer\Exclude()
+    */
+    private $grantupdates;
+
+    /**
      * @ORM\Column(name="created_at", type="datetime")
-     * @Groups({"student_list"})
      */
     protected $createdAt;
 
     /**
      * @ORM\Column(name="updated_at", type="datetime")
-     * @Groups({"student_list"})
      */
     protected $updatedAt;
 
     public function __construct()
     {
-        $this->studentsgroup = new ArrayCollection();
-        $this->studentsambassadorgroup = new ArrayCollection();
+        $this->grantupdates = new ArrayCollection();
     }
 
 
@@ -190,7 +192,34 @@ class Grant
         return $this;
     }
 
+    /**
+     * @return Collection|GrantUpdate[]
+     */
+    public function getGrantupdates(): Collection
+    {
+        return $this->grantupdates;
+    }
 
+    public function addGrantupdate(GrantUpdate $grantupdate): self
+    {
+        if (!$this->grantupdates->contains($grantupdate)) {
+            $this->grantupdates[] = $grantupdate;
+            $grantupdate->setGrant($this);
+        }
 
-   
+        return $this;
+    }
+
+    public function removeGrantupdate(GrantUpdate $grantupdate): self
+    {
+        if ($this->grantupdates->contains($grantupdate)) {
+            $this->grantupdates->removeElement($grantupdate);
+            // set the owning side to null (unless already changed)
+            if ($grantupdate->getGrant() === $this) {
+                $grantupdate->setGrant(null);
+            }
+        }
+
+        return $this;
+    }
 }
