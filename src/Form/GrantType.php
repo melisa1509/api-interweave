@@ -12,9 +12,10 @@ class GrantType extends AbstractType
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
     $builder
+    ->add('title')
     ->add('description')
-    ->add('participantsNumber')
-    ->add('amount')   
+    ->add('state')   
+    ->add('language')
     ;
      
   }

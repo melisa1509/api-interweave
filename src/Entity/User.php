@@ -126,10 +126,16 @@ class User implements UserInterface
    private $groupes;
 
    /**
-    * @ORM\OneToMany(targetEntity="App\Entity\Grant", mappedBy="embassador")
+    * @ORM\OneToMany(targetEntity="App\Entity\Grant", mappedBy="administrator")
     * @Serializer\Exclude()
     */
     private $grants;
+
+    /**
+    * @ORM\OneToMany(targetEntity="App\Entity\GrantAmbassador", mappedBy="ambassador")
+    * @Serializer\Exclude()
+    */
+    private $grantsambassador;
 
    /**
     * @ORM\OneToOne(targetEntity="App\Entity\StudentGroup", mappedBy="student")
@@ -183,6 +189,7 @@ class User implements UserInterface
         $this->boards = new ArrayCollection();
         $this->groupes = new ArrayCollection();
         $this->grants = new ArrayCollection();
+        $this->grantsambassador = new ArrayCollection();
     }
 
     /**
@@ -602,6 +609,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($grant->getEmbassador() === $this) {
                 $grant->setEmbassador(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GrantAmbassador[]
+     */
+    public function getGrantsambassador(): Collection
+    {
+        return $this->grantsambassador;
+    }
+
+    public function addGrantsambassador(GrantAmbassador $grantsambassador): self
+    {
+        if (!$this->grantsambassador->contains($grantsambassador)) {
+            $this->grantsambassador[] = $grantsambassador;
+            $grantsambassador->setAmbassador($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGrantsambassador(GrantAmbassador $grantsambassador): self
+    {
+        if ($this->grantsambassador->contains($grantsambassador)) {
+            $this->grantsambassador->removeElement($grantsambassador);
+            // set the owning side to null (unless already changed)
+            if ($grantsambassador->getAmbassador() === $this) {
+                $grantsambassador->setAmbassador(null);
             }
         }
 

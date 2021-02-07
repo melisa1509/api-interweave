@@ -26,17 +26,14 @@ class Grant
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private $id;    
 
     /**
-     * @ORM\Column(name="participants_number", type="integer") 
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=255)
      */
-    protected $participantsNumber;
-
-    /**
-     * @ORM\Column(name="amount", type="integer") 
-     */
-    protected $amount;
+    private $title;
 
     /**
      * @var string
@@ -44,6 +41,20 @@ class Grant
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="state", type="string", length=255)
+     */
+    private $state;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="language", type="string", length=255)
+     */
+    private $language;
 
     /**
      * @var \DateTime
@@ -57,14 +68,15 @@ class Grant
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      * 
      */
-    private $embassador;
+    private $administrator;
 
     /**
-    * @ORM\OneToMany(targetEntity="App\Entity\GrantUpdate", mappedBy="grant")
+    * @ORM\OneToMany(targetEntity="App\Entity\GrantAmbassador", mappedBy="ambassador")
     * @Serializer\Exclude()
     */
-    private $grantupdates;
+    private $grantsambassador;
 
+    
     /**
      * @ORM\Column(name="created_at", type="datetime")
      */
@@ -78,6 +90,7 @@ class Grant
     public function __construct()
     {
         $this->grantupdates = new ArrayCollection();
+        $this->grantsambassador = new ArrayCollection();
     }
 
 
@@ -132,26 +145,14 @@ class Grant
         return $this->id;
     }
 
-    public function getParticipantsNumber(): ?int
+    public function getTitle(): ?string
     {
-        return $this->participantsNumber;
+        return $this->title;
     }
 
-    public function setParticipantsNumber(int $participantsNumber): self
+    public function setTitle(string $title): self
     {
-        $this->participantsNumber = $participantsNumber;
-
-        return $this;
-    }
-
-    public function getAmount(): ?int
-    {
-        return $this->amount;
-    }
-
-    public function setAmount(int $amount): self
-    {
-        $this->amount = $amount;
+        $this->title = $title;
 
         return $this;
     }
@@ -168,6 +169,30 @@ class Grant
         return $this;
     }
 
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    public function setState(string $state): self
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    public function getLanguage(): ?string
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(string $language): self
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
     public function getDate(): ?\DateTimeInterface
     {
         return $this->date;
@@ -180,46 +205,48 @@ class Grant
         return $this;
     }
 
-    public function getEmbassador(): ?User
+    public function getAdministrator(): ?User
     {
-        return $this->embassador;
+        return $this->administrator;
     }
 
-    public function setEmbassador(?User $embassador): self
+    public function setAdministrator(?User $administrator): self
     {
-        $this->embassador = $embassador;
+        $this->administrator = $administrator;
 
         return $this;
     }
 
     /**
-     * @return Collection|GrantUpdate[]
+     * @return Collection|GrantAmbassador[]
      */
-    public function getGrantupdates(): Collection
+    public function getGrantsambassador(): Collection
     {
-        return $this->grantupdates;
+        return $this->grantsambassador;
     }
 
-    public function addGrantupdate(GrantUpdate $grantupdate): self
+    public function addGrantsambassador(GrantAmbassador $grantsambassador): self
     {
-        if (!$this->grantupdates->contains($grantupdate)) {
-            $this->grantupdates[] = $grantupdate;
-            $grantupdate->setGrant($this);
+        if (!$this->grantsambassador->contains($grantsambassador)) {
+            $this->grantsambassador[] = $grantsambassador;
+            $grantsambassador->setAmbassador($this);
         }
 
         return $this;
     }
 
-    public function removeGrantupdate(GrantUpdate $grantupdate): self
+    public function removeGrantsambassador(GrantAmbassador $grantsambassador): self
     {
-        if ($this->grantupdates->contains($grantupdate)) {
-            $this->grantupdates->removeElement($grantupdate);
+        if ($this->grantsambassador->contains($grantsambassador)) {
+            $this->grantsambassador->removeElement($grantsambassador);
             // set the owning side to null (unless already changed)
-            if ($grantupdate->getGrant() === $this) {
-                $grantupdate->setGrant(null);
+            if ($grantsambassador->getAmbassador() === $this) {
+                $grantsambassador->setAmbassador(null);
             }
         }
 
         return $this;
     }
+
+  
 }

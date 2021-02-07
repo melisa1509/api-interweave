@@ -43,11 +43,11 @@ class GrantUpdate
     private $file;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Grant", inversedBy="grantupdates")
-     * @ORM\JoinColumn(name="grant_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="App\Entity\GrantAmbassador", inversedBy="grantupdates")
+     * @ORM\JoinColumn(name="grant_ambassador_id", referencedColumnName="id", onDelete="CASCADE")
      * 
      */
-    private $grant;
+    private $grantambassador;
 
     /**
      * @ORM\Column(name="created_at", type="datetime")
@@ -140,16 +140,16 @@ class GrantUpdate
         return $this;
     }
 
-    public function getGrant(): ?Grant
+    public function getGrantambassador(): ?GrantAmbassador
     {
-        return $this->grant;
+        return $this->grantambassador;
     }
 
-    public function setGrant(?Grant $grant): self
+    public function setGrantambassador(?GrantAmbassador $grantambassador): self
     {
-        $this->grant = $grant;
+        $this->grantambassador = $grantambassador;
 
         return $this;
     }
-   
+
 }

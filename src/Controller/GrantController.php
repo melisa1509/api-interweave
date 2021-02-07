@@ -109,10 +109,18 @@ class GrantController extends FOSRestController
      * )
      *
      * @SWG\Parameter(
-     *     name="id_ambassador",
+     *     name="id_administrator",
      *     in="body",
      *     type="string",
-     *     description="Id Ambassador",
+     *     description="Id Administrator",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="title",
+     *     in="body",
+     *     type="string",
+     *     description="The title of Grant",
      *     schema={}
      * )
      * 
@@ -123,28 +131,28 @@ class GrantController extends FOSRestController
      *     description="The description of Grant",
      *     schema={}
      * )
+     * 
+     * * @SWG\Parameter(
+     *     name="language",
+     *     in="body",
+     *     type="string",
+     *     description="The language of Grant",
+     *     schema={}
+     * )
+     * 
+     * * @SWG\Parameter(
+     *     name="state",
+     *     in="body",
+     *     type="string",
+     *     description="The state of Grant",
+     *     schema={}
+     * )
      *
      * @SWG\Parameter(
      *     name="date",
      *     in="body",
      *     type="date",
      *     description="The date",
-     *     schema={}
-     * )
-     * 
-     * @SWG\Parameter(
-     *     name="participants_number",
-     *     in="body",
-     *     type="string",
-     *     description="Number of Participants",
-     *     schema={}
-     * )
-     * 
-     * @SWG\Parameter(
-     *     name="amount",
-     *     in="body",
-     *     type="string",
-     *     description="Amount of Money",
      *     schema={}
      * )
      *       
@@ -157,7 +165,7 @@ class GrantController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
  
         $message = "";
-        $id_ambassador = $request->request->get('id_ambassador');
+        $id_administrator = $request->request->get('id_administrator');
         $grant=new Grant();
         //Create a form
         $form=$this->createForm(GrantType::class, $grant);
@@ -168,15 +176,15 @@ class GrantController extends FOSRestController
             $code = 200;
             $error = false;
 
-            $ambassador = $em->getRepository("App:User")->find($id_ambassador);
+            $administrator = $em->getRepository("App:User")->find($id_administrator);
  
-            if (is_null($ambassador)) {
+            if (is_null($administrator)) {
                 $code = 500;
                 $error = true;
-                $message = "The Ambassador does not exist";
+                $message = "The Administrator does not exist";
             }
 
-            $grant->setEmbassador($ambassador);
+            $grant->setAdministrator($administrator);
 
             $requestDate = strtotime($request->request->get('date'));
             $formatDate = date('Y-m-d', $requestDate);
