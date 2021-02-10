@@ -7,6 +7,8 @@ use App\Entity\Grant;
 use App\Form\GrantType;
 use App\Entity\GrantUpdate;
 use App\Form\GrantUpdateType;
+use App\Entity\GrantAmbassador;
+use App\Form\GrantAmbassadorType;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -70,7 +72,7 @@ class GrantController extends FOSRestController
             $role = $request->request->get('role');
             $id = $request->request->get('id_ambassador');
             if($role == 'ROLE_ADMIN' or $role == 'ROLE_LANGUAGE_ADMIN'){
-                $grants = $em->getRepository("App:Grant")->findAll();
+                $grants = $em->getRepository("App:Grant")->findBy(array(), array("state" => "ASC"));
             }
             else if($role == 'ROLE_EMBASSADOR' or $role == 'ROLE_STUDENT_EMBASSADOR'){
                 $grants = $em->getRepository("App:Grant")->findBy(array('embassador' => $id));
@@ -83,6 +85,61 @@ class GrantController extends FOSRestController
             $code = 500;
             $error = true;
             $message = "An error has occurred trying to get all Grant - Error: {$ex->getMessage()}";
+        }
+ 
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $code == 200 ? $grants : $message,
+        ];
+ 
+        return new Response($serializer->serialize($response, "json"));
+    }
+
+     /**
+     * @Rest\Post("/active", name="grant_active", defaults={"_format":"json"})
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Gets all active Grants."
+     * )
+     *
+     * @SWG\Response(
+     *     response=500,
+     *     description="An error has occurred trying to get all active grants."
+     * )
+     *    
+     * @SWG\Parameter(
+     *     name="language",
+     *     in="path",
+     *     type="string",
+     *     description="The language of user"
+     * )
+     *
+     * @SWG\Tag(name="Grant")
+     */
+    public function activeAction(Request $request) {
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $grants = [];
+        $message = "";
+ 
+        try {
+            $code = 200;
+            $error = false;
+
+            $language = $request->request->get('language');
+ 
+            $grants = $em->getRepository("App:Grant")->findBy(array("state" => "state.active", "language" => $language), array("state" => "ASC"));
+ 
+            if (is_null($grants)) {
+                $admins = [];
+            }
+ 
+        } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to get all Admins - Error: {$ex->getMessage()}";
         }
  
         $response = [
@@ -291,6 +348,189 @@ class GrantController extends FOSRestController
             'code' => $code,
             'error' => $error,
             'data' => $code == 200 ? $grantupdate : $message,
+        ];
+ 
+        return new Response($serializer->serialize($response, "json"));
+    }
+
+    /**
+     * @Rest\Post("/newambassador", name="grant_new_ambassador")
+     *
+     * @SWG\Response(
+     *     response=201,
+     *     description="Grant ambassador was successfully registered"
+     * )
+     *
+     * @SWG\Response(
+     *     response=500,
+     *     description="Grant ambassador was not successfully registered"
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="id_grant",
+     *     in="body",
+     *     type="integer",
+     *     description="Id Grant",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="id_ambassador",
+     *     in="body",
+     *     type="integer",
+     *     description="Id Ambassador",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="code",
+     *     in="body",
+     *     type="string",
+     *     description="The code of Ambassador",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="state",
+     *     in="body",
+     *     type="string",
+     *     description="The state of Grant Aplication",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="amount",
+     *     in="body",
+     *     type="integer",
+     *     description="The amount of money assigned",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="number",
+     *     in="body",
+     *     type="integer",
+     *     description="The number of participants ",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="question1",
+     *     in="body",
+     *     type="string",
+     *     description="The question 1 ",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="question2",
+     *     in="body",
+     *     type="string",
+     *     description="The question 2 ",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="question3",
+     *     in="body",
+     *     type="string",
+     *     description="The question 3 ",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="question4",
+     *     in="body",
+     *     type="string",
+     *     description="The question 4 ",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="question5",
+     *     in="body",
+     *     type="string",
+     *     description="The question 5 ",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="question6",
+     *     in="body",
+     *     type="string",
+     *     description="The question 6 ",
+     *     schema={}
+     * )
+     * 
+      * @SWG\Parameter(
+     *     name="question7",
+     *     in="body",
+     *     type="string",
+     *     description="The question 7 ",
+     *     schema={}
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="file",
+     *     in="body",
+     *     type="string",
+     *     description="The file",
+     *     schema={}
+     * )
+     *   
+     *    
+     * @SWG\Tag(name="Grant")
+     */ 
+
+    public function newAmbassadorAction(Request $request) {
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+ 
+        $message = "";
+        $id_grant = $request->request->get('id_grant');
+        $id_ambassador = $request->request->get('id_ambassador');
+        $grantambassador=new GrantAmbassador();
+        //Create a form
+        $form=$this->createForm(GrantAmbassadorType::class, $grantambassador);
+        $form->submit($request->request->all());
+        
+        
+        try {
+            $code = 200;
+            $error = false;
+
+            $grant = $em->getRepository("App:Grant")->find($id_grant);
+            $ambassador = $em->getRepository("App:User")->find($id_ambassador);
+ 
+            if (is_null($grant) ) {
+                $code = 500;
+                $error = true;
+                $message = "The Grant does not exist";
+            }
+
+            if (is_null($ambassador) ) {
+                $code = 500;
+                $error = true;
+                $message = "The Ambassador does not exist";
+            }
+
+            $grantambassador->setGrant($grant); 
+            $grantambassador->setAmbassador($ambassador);                     
+
+            $em->persist($grantambassador);
+            $em->flush();
+  
+ 
+        } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to register the Grant - Error: {$ex->getMessage()}";
+        }
+ 
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $code == 200 ? $grantambassador : $message,
         ];
  
         return new Response($serializer->serialize($response, "json"));
@@ -573,6 +813,172 @@ class GrantController extends FOSRestController
             'code' => $code,
             'error' => $error,
             'data' => $code == 200 ? $grantupdate : $message,
+        ];
+ 
+        return new Response($serializer->serialize($response, "json"));
+    }
+
+    /**
+     * @Rest\Put("/editambassador/{id}.{_format}", name="grant_edit_ambassador", defaults={"_format":"json"})
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="The grant was edited successfully."
+     * )
+     *
+     * @SWG\Response(
+     *     response=500,
+     *     description="An error has occurred trying to edit the grant."
+     * )
+     *
+      * @SWG\Parameter(
+     *     name="id_grant",
+     *     in="body",
+     *     type="integer",
+     *     description="Id Grant",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="id_ambassador",
+     *     in="body",
+     *     type="integer",
+     *     description="Id Ambassador",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="code",
+     *     in="body",
+     *     type="string",
+     *     description="The code of Ambassador",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="state",
+     *     in="body",
+     *     type="string",
+     *     description="The state of Grant Aplication",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="amount",
+     *     in="body",
+     *     type="integer",
+     *     description="The amount of money assigned",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="number",
+     *     in="body",
+     *     type="integer",
+     *     description="The number of participants ",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="question1",
+     *     in="body",
+     *     type="string",
+     *     description="The question 1 ",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="question2",
+     *     in="body",
+     *     type="string",
+     *     description="The question 2 ",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="question3",
+     *     in="body",
+     *     type="string",
+     *     description="The question 3 ",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="question4",
+     *     in="body",
+     *     type="string",
+     *     description="The question 4 ",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="question5",
+     *     in="body",
+     *     type="string",
+     *     description="The question 5 ",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="question6",
+     *     in="body",
+     *     type="string",
+     *     description="The question 6 ",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="question7",
+     *     in="body",
+     *     type="string",
+     *     description="The question 7 ",
+     *     schema={}
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="file",
+     *     in="body",
+     *     type="string",
+     *     description="The file",
+     *     schema={}
+     * )
+     *
+     * @SWG\Tag(name="Grant")
+     */
+    public function editAmbassadorAction(Request $request, $id) {
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $grantambassador = [];
+        $message = "";
+
+        try {
+            $code = 200;
+            $error = false;
+            $grantambassador = $em->getRepository("App:GrantAmbassador")->find($id);
+ 
+            if (!is_null($grantambassador)) {
+                $form = $this->createForm(GrantAmbassadorType::class, $grantupdate);
+                $form->submit($request->request->all());
+              
+                $em->persist($grantambassador);
+                $em->flush();
+ 
+            } else {
+                $code = 500;
+                $error = true;
+                $message = "An error has occurred trying to get a grant update - Error: You must to provide fields user or the grant id does not exist";
+            }
+ 
+        } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to edit the grant update - Error: {$ex->getMessage()}";
+        }
+ 
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $code == 200 ? $grantambassador : $message,
         ];
  
         return new Response($serializer->serialize($response, "json"));
