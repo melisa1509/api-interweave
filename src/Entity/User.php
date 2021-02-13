@@ -83,7 +83,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="country", type="string", nullable=true, length=255)
-     * @Groups({"student_list"})
+     * @Groups({"student_list", "student_group"})
      */
     private $country;
 

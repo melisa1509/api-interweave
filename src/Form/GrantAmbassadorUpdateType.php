@@ -7,19 +7,13 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Entity\GrantAmbassador;
 
-class GrantAmbassadorType extends AbstractType
+class GrantAmbassadorUpdateType extends AbstractType
 {
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
     $builder
-    ->add('code')
-    ->add('number')
-    ->add('file')
-    ->add('question1')
-    ->add('question2')
-    ->add('question4')
-    ->add('question5')
-    ->add('question6')
+    ->add('correction')
+    ->add('amount')   
     ;
      
   }

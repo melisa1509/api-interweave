@@ -71,8 +71,7 @@ class Grant
     private $administrator;
 
     /**
-    * @ORM\OneToMany(targetEntity="App\Entity\GrantAmbassador", mappedBy="ambassador")
-    * @Serializer\Exclude()
+    * @ORM\OneToMany(targetEntity="App\Entity\GrantAmbassador", mappedBy="grant")
     */
     private $grantsambassador;
 
