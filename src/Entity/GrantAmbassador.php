@@ -25,6 +25,7 @@ class GrantAmbassador
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"grant_ambassador_list"})
      */
     private $id;
 
@@ -39,12 +40,14 @@ class GrantAmbassador
      * @var string
      *
      * @ORM\Column(name="state", type="string", length=255)
+     * @Groups({"grant_ambassador_list"})
      */
     private $state;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="grantsambassador")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     * @Groups({"grant_ambassador_list"})
      * 
      */
     private $ambassador;
@@ -52,6 +55,7 @@ class GrantAmbassador
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Grant", inversedBy="grantsambassador")
      * @ORM\JoinColumn(name="grant_id", referencedColumnName="id", onDelete="CASCADE")
+     * @Groups({"grant_ambassador_list"})
      * 
      */
     private $grant;
@@ -134,6 +138,13 @@ class GrantAmbassador
      * @ORM\Column(name="file", type="string", length=255)
      */
     private $file;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="file2", type="string", length=255)
+     */
+    private $file2;
     
 
     /**
@@ -410,6 +421,18 @@ class GrantAmbassador
                 $grantupdate->setGrant(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFile2(): ?string
+    {
+        return $this->file2;
+    }
+
+    public function setFile2(string $file2): self
+    {
+        $this->file2 = $file2;
 
         return $this;
     }

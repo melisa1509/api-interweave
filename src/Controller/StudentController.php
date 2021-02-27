@@ -43,7 +43,7 @@ class StudentController extends FOSRestController
     
  
     /**
-     * @Rest\Get("/", name="students_index", defaults={"_format":"json"})
+     * @Rest\GET("/", name="students_index", defaults={"_format":"json"})
      *
      * @SWG\Response(
      *     response=200,
@@ -54,13 +54,7 @@ class StudentController extends FOSRestController
      *     response=500,
      *     description="An error has occurred trying to get all students."
      * )
-     *
-     * @SWG\Parameter(
-     *     name="id",
-     *     in="path",
-     *     type="string",
-     *     description="User ID"
-     * )
+     *    
      *
      *
      * @SWG\Tag(name="Student")
@@ -77,6 +71,55 @@ class StudentController extends FOSRestController
  
             //$userId = $this->getUser()->getId();
             $users = $em->getRepository("App:User")->getStudents();
+ 
+            if (is_null($users)) {
+                $users = [];
+            }
+ 
+        } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to get all Users - Error: {$ex->getMessage()}";
+        }
+ 
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $code == 200 ? $users : $message,
+        ];
+ 
+        return new Response($serializer->serialize($response, "json", SerializationContext::create()->setGroups(array('student_list'))));
+    }
+
+     /**
+     * @Rest\Get("/list", name="students_list", defaults={"_format":"json"})
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Gets all students."
+     * )
+     *
+     * @SWG\Response(
+     *     response=500,
+     *     description="An error has occurred trying to get all students."
+     * )
+     *
+     *
+     *
+     * @SWG\Tag(name="Student")
+     */
+    public function listAction(Request $request) {
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $users = [];
+        $message = "";
+ 
+        try {
+            $code = 200;
+            $error = false;
+ 
+            //$userId = $this->getUser()->getId();
+            $users = $em->getRepository("App:User")->findAll();
  
             if (is_null($users)) {
                 $users = [];

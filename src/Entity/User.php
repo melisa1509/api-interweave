@@ -59,7 +59,7 @@ class User implements UserInterface
      /**
      * @var string
      *
-     * @ORM\Column(name="language_grader", type="json_array")
+     * @ORM\Column(name="language_grader", type="json_array", nullable=true)
      */
     private $languageGrader = array();
 
@@ -67,7 +67,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="first_name", type="string", length=255)
-     * @Groups({"student_list", "future_ambassador", "student_group", "group_list"})
+     * @Groups({"student_list", "future_ambassador", "student_group", "group_list", "grant_ambassador_list"})
      */
     private $firstName;
 
@@ -75,7 +75,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=255)
-     * @Groups({"student_list", "future_ambassador", "student_group", "group_list" })
+     * @Groups({"student_list", "future_ambassador", "student_group", "group_list", "grant_ambassador_list" })
      */
     private $lastName;
 
@@ -124,6 +124,12 @@ class User implements UserInterface
     * @Serializer\Exclude()
     */
    private $groupes;
+
+   /**
+    * @ORM\OneToMany(targetEntity="App\Entity\GrantUpdate", mappedBy="user")
+    * @Serializer\Exclude()
+    */
+    private $grantupdates;
 
    /**
     * @ORM\OneToMany(targetEntity="App\Entity\Grant", mappedBy="administrator")
@@ -190,6 +196,7 @@ class User implements UserInterface
         $this->groupes = new ArrayCollection();
         $this->grants = new ArrayCollection();
         $this->grantsambassador = new ArrayCollection();
+        $this->grantupdates = new ArrayCollection();
     }
 
     /**
@@ -640,6 +647,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($grantsambassador->getAmbassador() === $this) {
                 $grantsambassador->setAmbassador(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GrantUpdate[]
+     */
+    public function getGrantupdates(): Collection
+    {
+        return $this->grantupdates;
+    }
+
+    public function addGrantupdate(GrantUpdate $grantupdate): self
+    {
+        if (!$this->grantupdates->contains($grantupdate)) {
+            $this->grantupdates[] = $grantupdate;
+            $grantupdate->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGrantupdate(GrantUpdate $grantupdate): self
+    {
+        if ($this->grantupdates->contains($grantupdate)) {
+            $this->grantupdates->removeElement($grantupdate);
+            // set the owning side to null (unless already changed)
+            if ($grantupdate->getUser() === $this) {
+                $grantupdate->setUser(null);
             }
         }
 

@@ -50,6 +50,13 @@ class GrantUpdate
     private $grantambassador;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="grantupdates")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     * 
+     */
+    private $user;
+
+    /**
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
@@ -148,6 +155,18 @@ class GrantUpdate
     public function setGrantambassador(?GrantAmbassador $grantambassador): self
     {
         $this->grantambassador = $grantambassador;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

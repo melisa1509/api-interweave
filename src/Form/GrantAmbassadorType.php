@@ -15,6 +15,7 @@ class GrantAmbassadorType extends AbstractType
     ->add('code')
     ->add('number')
     ->add('file')
+    ->add('file2')
     ->add('question1')
     ->add('question2')
     ->add('question4')

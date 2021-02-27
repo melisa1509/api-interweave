@@ -79,13 +79,13 @@ class GroupController extends FOSRestController
             $role = $request->request->get('role');
             $id = $request->request->get('id_ambassador');
             if($role == 'ROLE_ADMIN' or $role == 'ROLE_LANGUAGE_ADMIN'){
-                $groups = $em->getRepository("App:Groupe")->findAll();
+                $groups = $em->getRepository("App:Groupe")->findBy(array(), array('startDate' => 'DESC'));
             }
             else if($role == 'ROLE_EMBASSADOR' or $role == 'ROLE_STUDENT_EMBASSADOR'){
-                $groups = $em->getRepository("App:Groupe")->findBy(array('embassador' => $id));
+                $groups = $em->getRepository("App:Groupe")->findBy(array('embassador' => $id), array('startDate' => 'DESC'));
             }
             else{
-                $groups = $em->getRepository("App:Groupe")->findAll();
+                $groups = $em->getRepository("App:Groupe")->findBy(array(), array('startDate' => 'DESC'));
             }
  
         } catch (Exception $ex) {

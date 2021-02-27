@@ -25,6 +25,7 @@ class Grant
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"grant_ambassador_list"})
      */
     private $id;    
 
@@ -32,6 +33,7 @@ class Grant
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
+     * @Groups({"grant_ambassador_list"})
      */
     private $title;
 
@@ -53,6 +55,7 @@ class Grant
      * @var string
      *
      * @ORM\Column(name="language", type="string", length=255)
+     * @Groups({"grant_ambassador_list"})
      */
     private $language;
 
@@ -66,6 +69,7 @@ class Grant
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="grants")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     * @Groups({"grant_ambassador_list"})
      * 
      */
     private $administrator;

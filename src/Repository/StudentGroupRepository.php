@@ -236,7 +236,7 @@ class StudentGroupRepository extends EntityRepository
            JOIN s.student st
            JOIN st.programmbs p
            WHERE g.id = :id
-           AND p.state != :state'
+           AND p.state = :state'
       )->setParameters(array(
         'id' => $group_id,
         'state' => $state

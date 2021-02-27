@@ -1061,7 +1061,7 @@ class CertificateController extends FOSRestController
 
       $em = $this->getDoctrine()->getManager(); 
 
-      $students = $em->getRepository('App:StudentGroup')->studentsDifferentStateByGroup($id, "state.approved");
+      $students = $em->getRepository('App:StudentGroup')->studentsByGroup($id, "state.approved");
 
       $pdf = $this->get('white_october.tcpdf.public')->create('horizontal', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
       
@@ -1076,6 +1076,11 @@ class CertificateController extends FOSRestController
 
       foreach ($students as $student) {
 
+        if($student->getStudent()->getProgramMbs()){
+
+          if($student->getStudent()->getProgramMbs()->getState() != "state.approved"){
+
+          
         
         $interweaveLocal = ucwords(mb_strtolower($student->getStudent()->getStudentGroup()->getGroup()->getInterweaveLocal(),'UTF-8'));
 
@@ -1118,7 +1123,7 @@ class CertificateController extends FOSRestController
 
 
           
-          $img_file = $this->container->getparameter('kernel.project_dir').'/web/img/'.$student->getStudent()->getLanguage().'_attendance.jpg';
+          $img_file = $this->container->getparameter('kernel.project_dir').'/web/img/'.$student->getStudent()->getLanguage().'_attendance.png';
           $pdf->Image($img_file, 0, 0, 279, 216, '', '', '', false, 600, '', false, false, 0);
 
           
@@ -1134,6 +1139,71 @@ class CertificateController extends FOSRestController
           $pdf->writeHTML($html, true, false, true, false, '');
           $pdf->SetFont("times", '', 6);
           $pdf->SetFont("snellb", '', 8);
+        }
+        
+      }
+      else{
+        
+        $interweaveLocal = ucwords(mb_strtolower($student->getStudent()->getStudentGroup()->getGroup()->getInterweaveLocal(),'UTF-8'));
+
+
+        $html = '<h2></h2>
+        <table border="0"  >
+            <tr>
+                <th colspan="8" align="right" style="color:black;text-align:center;font-weight:bold;font-size:30pt;height:273pt;"></th>
+            </tr>
+            <tr>
+                <th colspan="8" align="center" style="color:black;text-align:center;font-weight:bold;font-size:30pt;height:135pt;">'.ucwords(mb_strtolower($student->getStudent()->getFirstName().' '.$student->getStudent()->getLastName(),'UTF-8')).'</th>
+            </tr>
+            <tr>
+                <td  align="center" width="13%"></td>
+                <td  align="center" width="22%"></td>
+                <td  align="center" width="10%"></td>
+                <td  align="center" width="10%"></td>
+                <td  align="center" width="1%"></td>
+                <td  align="center" width="10%" ></td>
+                <td  align="center" width="22%" style="height:10pt;font-size:13pt;height:33pt;">'.$interweaveLocal.'</td>
+                <td  align="center" width="10%"></td>
+            </tr>
+
+
+        </table>';
+
+
+          // add a page
+          $resolution= array(279, 216);
+          $pdf->AddPage('L', $resolution);
+
+          // get the current page break margin
+          $bMargin = $pdf->getBreakMargin();
+          // get current auto-page-break mode
+          $auto_page_break = $pdf->getAutoPageBreak();
+          // disable auto-page-break
+          $pdf->SetAutoPageBreak(false, 0);
+          // set bacground image
+
+
+
+          
+          $img_file = $this->container->getparameter('kernel.project_dir').'/web/img/'.$student->getStudent()->getLanguage().'_attendance.png';
+          $pdf->Image($img_file, 0, 0, 279, 216, '', '', '', false, 600, '', false, false, 0);
+
+          
+
+          
+          // restore auto-page-break status
+          $pdf->SetAutoPageBreak($auto_page_break, $bMargin);
+          // set the starting point for the page content
+          $pdf->setPageMark();
+
+
+          // Print a text
+          $pdf->writeHTML($html, true, false, true, false, '');
+          $pdf->SetFont("times", '', 6);
+          $pdf->SetFont("snellb", '', 8);
+        
+      }
+      
           
 
       }

@@ -583,6 +583,7 @@ class ProgramSa
      */
     private $rule8;
 
+
     /**
      * @var string
      *
@@ -628,7 +629,7 @@ class ProgramSa
     /**
      * @var string
      *
-     * @ORM\Column(name="graduate5", type="json_array")
+     * @ORM\Column(name="graduate5", type="json_array", nullable=true)
      */
     private $graduate5 = array();
 
@@ -3424,30 +3425,7 @@ class ProgramSa
         return $this->rule8;
     }
 
-    /**
-     * Set rule9
-     *
-     * @param string $rule9
-     *
-     * @return ProgramSa
-     */
-    public function setRule9($rule9)
-    {
-        $this->rule9 = $rule9;
-
-        return $this;
-    }
-
-    /**
-     * Get rule9
-     *
-     * @return string
-     */
-    public function getRule9()
-    {
-        return $this->rule9;
-    }
-
+  
     /**
      * Set rule10
      *
@@ -3942,13 +3920,34 @@ class ProgramSa
         return $this;
     }
 
-    /**
-     * Get productDescription.
-     *
-     * @return string|null
-     */
-    public function getProductDescription()
+    public function getProductDescription(): ?string
     {
         return $this->productDescription;
     }
+
+      /**
+     * Set rule9
+     *
+     * @param array $rule9
+     *
+     * @return ProgramSa
+     */
+    public function setRule9($rule9)
+    {
+        $this->rule9 = $rule9;
+
+        return $this;
+    }
+
+    /**
+     * Get rule9
+     *
+     * @return array
+     */
+    public function getRule9()
+    {
+        return $this->rule9;
+    }
+
+    
 }

@@ -35,10 +35,8 @@ class UserRepository extends EntityRepository
        $qb->select('u')
            ->from('App:User', 'u')
            ->where('u.roles LIKE :role1')
-           ->orWhere('u.roles LIKE :role2')
            ->setParameters(array(
              'role1'     => '%ROLE_STUDENT%',
-             'role2'     => '%ROLE_STUDENT_EMBASSADOR%',
            ))
            ->orderBy('u.firstName', 'ASC');
 

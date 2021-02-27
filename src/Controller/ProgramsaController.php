@@ -167,7 +167,7 @@ class ProgramsaController extends FOSRestController
         $response = [
             'code' => $code,
             'error' => $error,
-            'data' => $code == 200 ? $student : $message,
+            'data' => $code == 200 ? $programsa : $message,
         ];
  
         return new Response($serializer->serialize($response, "json"));

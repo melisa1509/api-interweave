@@ -349,10 +349,7 @@ class EvaluationController extends FOSRestController
         $id_student = $request->request->get('id_student');
 
         $evaluation = $student = $em->getRepository("App:Evaluation")->findOneBy(array('student' => $id_student));
-        if (is_null($evaluation)) {
-            $evaluation=new Evaluation();
-        }
-        
+               
         //Create a form
         $form=$this->createForm(EvaluationPostType::class, $evaluation);
         $form->submit($request->request->all());
@@ -362,17 +359,12 @@ class EvaluationController extends FOSRestController
             $code = 200;
             $error = false;
 
-            $student = $em->getRepository("App:User")->find($id_student);
- 
-            if (is_null($student)) {
+            if (is_null($evaluation)) {
                 $code = 500;
                 $error = true;
-                $message = "The Student does not exist";
+                $message = "The Evaluation does not exist";
             }
 
-            $evaluation->setStudent($student);
-
-           
 
             $em->persist($evaluation);
             $em->flush();
