@@ -54,17 +54,18 @@ class Grant
     /**
      * @var string
      *
+     * @ORM\Column(name="type", type="string", length=255)
+     */
+    private $type;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="language", type="string", length=255)
      * @Groups({"grant_ambassador_list"})
      */
     private $language;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date", type="date")
-     */
-    private $date;   
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="grants")
@@ -76,6 +77,7 @@ class Grant
 
     /**
     * @ORM\OneToMany(targetEntity="App\Entity\GrantAmbassador", mappedBy="grant")
+    * @Serializer\Exclude()
     */
     private $grantsambassador;
 
@@ -196,18 +198,6 @@ class Grant
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(\DateTimeInterface $date): self
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
     public function getAdministrator(): ?User
     {
         return $this->administrator;
@@ -247,6 +237,18 @@ class Grant
                 $grantsambassador->setAmbassador(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

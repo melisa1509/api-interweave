@@ -128,6 +128,12 @@ class Groupe
     private $studentsgroup;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\GrantGroup", mappedBy="group")
+     * @Serializer\Exclude()
+     */
+    private $grantgroups;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\StudentAmbassadorGroup", mappedBy="group")
      * @Serializer\Exclude()
      */
@@ -156,6 +162,7 @@ class Groupe
     {
         $this->studentsgroup = new ArrayCollection();
         $this->studentsambassadorgroup = new ArrayCollection();
+        $this->grantgroups = new ArrayCollection();
     }
 
 
@@ -466,6 +473,37 @@ class Groupe
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @return Collection|GrantGroup[]
+     */
+    public function getGrantgroups(): Collection
+    {
+        return $this->grantgroups;
+    }
+
+    public function addGrantgroup(GrantGroup $grantgroup): self
+    {
+        if (!$this->grantgroups->contains($grantgroup)) {
+            $this->grantgroups[] = $grantgroup;
+            $grantgroup->setGroup($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGrantgroup(GrantGroup $grantgroup): self
+    {
+        if ($this->grantgroups->contains($grantgroup)) {
+            $this->grantgroups->removeElement($grantgroup);
+            // set the owning side to null (unless already changed)
+            if ($grantgroup->getGroup() === $this) {
+                $grantgroup->setGroup(null);
+            }
+        }
+
+        return $this;
     }
 
 

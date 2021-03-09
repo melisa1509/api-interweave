@@ -16,6 +16,7 @@ class GrantType extends AbstractType
     ->add('description')
     ->add('state')   
     ->add('language')
+    ->add('type')
     ;
      
   }

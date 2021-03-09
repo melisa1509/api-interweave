@@ -8,6 +8,7 @@ use App\Form\GrantType;
 use App\Entity\GrantUpdate;
 use App\Form\GrantUpdateType;
 use App\Entity\GrantAmbassador;
+use App\Entity\GrantGroup;
 use App\Form\GrantAmbassadorType;
 use App\Form\GrantAmbassadorUpdateType;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -97,6 +98,50 @@ class GrantController extends FOSRestController
         return new Response($serializer->serialize($response, "json"));
     }
 
+     /**
+     * @Rest\Get("/deadline", name="grants_deadline")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Gets all grants."
+     * )
+     *
+     * @SWG\Response(
+     *     response=500,
+     *     description="An error has occurred trying to get all grants."
+     * )
+     *    
+     *
+     *
+     * @SWG\Tag(name="Grant")
+     */
+    public function deadlineAction(Request $request) {
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $deadline = [];
+        $message = "";
+ 
+        try {
+            $code = 200;
+            $error = false;
+            $deadline = date("Y-m-t");
+            
+ 
+        } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to get deadline Grant - Error: {$ex->getMessage()}";
+        }
+ 
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $code == 200 ? $deadline : $message,
+        ];
+ 
+        return new Response($serializer->serialize($response, "json"));
+    }
+
     /**
      * @Rest\Post("/ambassadorlist", name="grants_ambassador_list")
      *
@@ -169,13 +214,24 @@ class GrantController extends FOSRestController
      *     type="string",
      *     description="The language of user"
      * )
+     * 
+     * @SWG\Parameter(
+     *     name="id_user",
+     *     in="path",
+     *     type="string",
+     *     description="The id of user"
+     * )
      *
      * @SWG\Tag(name="Grant")
      */
     public function activeAction(Request $request) {
         $serializer = $this->get('jms_serializer');
         $em = $this->getDoctrine()->getManager();
-        $grants = [];
+        $grants_available = [];
+        $grants_ambassador = [];
+        $deadline_month = date("m-Y");
+        $datem = "";
+        
         $message = "";
  
         try {
@@ -183,12 +239,32 @@ class GrantController extends FOSRestController
             $error = false;
 
             $language = $request->request->get('language');
+            $id_user = $request->request->get('id_user');
  
-            $grants = $em->getRepository("App:Grant")->findBy(array("state" => "state.available", "language" => $language), array("state" => "ASC"));
- 
-            if (is_null($grants)) {
-                $admins = [];
+            $grants = $em->getRepository("App:Grant")->findBy(array("language" => $language ), array("state" => "ASC"));
+
+            foreach ($grants as $grant) {
+                $available = true;
+                $grantsambassador = $em->getRepository("App:GrantAmbassador")->findBy(array("ambassador" => $id_user, "grant" => $grant->getId()), array("createdAt" => "DESC"));
+                foreach ($grantsambassador as $ga) {
+                    if($ga->getCreatedAt()->format('m-Y')  == $deadline_month){
+                        $available = false;
+                    }
+                    $grants_ambassador[] = $ga;
+                    $datem = $ga->getCreatedAt()->format('m-Y');
+                }
+
+                if($available && $grant->getState() === "state.available"){
+                    $grants_available[] = $grant;
+                }
+                
             }
+
+            $grants = [                 
+                'grants_available'   => $grants_available,
+                'grants_ambassador'  => $grants_ambassador,
+            ];
+ 
  
         } catch (Exception $ex) {
             $code = 500;
@@ -297,10 +373,6 @@ class GrantController extends FOSRestController
 
             $grant->setAdministrator($administrator);
 
-            $requestDate = strtotime($request->request->get('date'));
-            $formatDate = date('Y-m-d', $requestDate);
-            $grant->setDate(new \DateTime($formatDate, (new \DateTimeZone('America/New_York'))));
-           
 
             $em->persist($grant);
             $em->flush();
@@ -316,6 +388,94 @@ class GrantController extends FOSRestController
             'code' => $code,
             'error' => $error,
             'data' => $code == 200 ? $grant : $message,
+        ];
+ 
+        return new Response($serializer->serialize($response, "json"));
+    }
+
+     /**
+     * @Rest\Post("/newgrantgroups", name="grant_new_groups")
+     *
+     * @SWG\Response(
+     *     response=201,
+     *     description="Grant was successfully registered"
+     * )
+     *
+     * @SWG\Response(
+     *     response=500,
+     *     description="Grant was not successfully registered"
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="id_grant_ambassador",
+     *     in="body",
+     *     type="string",
+     *     description="Id Grant Ambassador",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="groups",
+     *     in="body",
+     *     type="string",
+     *     description="The array Id Groups",
+     *     schema={}
+     * )
+     * 
+     
+     *       
+     *    
+     * @SWG\Tag(name="Grant")
+     */ 
+
+    public function newGrantGroupsAction(Request $request) {
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+ 
+        $message = "";
+        $id_grant_ambassador = $request->request->get('id_grant_ambassador');
+        $groups = explode(',', $request->request->get('groups'));
+
+        
+        try {
+            $code = 200;
+            $error = false;
+
+            $grant_ambassador = $em->getRepository("App:GrantAmbassador")->find($id_grant_ambassador);
+ 
+            if (is_null($grant_ambassador)) {
+                $code = 500;
+                $error = true;
+                $message = "The Grant Ambassador does not exist";
+            }
+
+            $em->getRepository("App:GrantGroup")->deleteGrantGroups($id_grant_ambassador);
+            
+            foreach ($groups as $group) {
+                $grant=new GrantGroup();
+                $id_group =  explode("-", $group);
+
+                $grp = $em->getRepository("App:Groupe")->find($id_group[1]);
+
+                $grant->setGroup($grp);
+                $grant->setGrantAmbassador($grant_ambassador);
+                $em->persist($grant);
+                $em->flush();
+
+            }
+            
+  
+ 
+        } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to register the Grant Group - Error: {$ex->getMessage()}";
+        }
+ 
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $code == 200 ? $grant_ambassador : $message,
         ];
  
         return new Response($serializer->serialize($response, "json"));
@@ -419,6 +579,92 @@ class GrantController extends FOSRestController
             'code' => $code,
             'error' => $error,
             'data' => $code == 200 ? $grantupdate : $message,
+        ];
+ 
+        return new Response($serializer->serialize($response, "json"));
+    }
+
+     /**
+     * @Rest\Post("/newgroup", name="grant_new_group")
+     *
+     * @SWG\Response(
+     *     response=201,
+     *     description="Grant update was successfully registered"
+     * )
+     *
+     * @SWG\Response(
+     *     response=500,
+     *     description="Grant update was not successfully registered"
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="id_grant_ambassador",
+     *     in="body",
+     *     type="string",
+     *     description="Id Grant Ambassador",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="id_group",
+     *     in="body",
+     *     type="string",
+     *     description="Id Group",
+     *     schema={}
+     * )
+     *      
+     *   
+     *    
+     * @SWG\Tag(name="Grant")
+     */ 
+
+    public function newGroupAction(Request $request) {
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+ 
+        $message = "";
+        $id_grant_ambassador = $request->request->get('id_grant_ambassador');
+        $id_group = $request->request->get('id_group');
+
+        $grantgroup=new GrantGroup();
+                
+        
+        try {
+            $code = 200;
+            $error = false;
+
+            $grantambassador = $em->getRepository("App:GrantAmbassador")->find($id_grant_ambassador);
+            $group = $em->getRepository("App:Groupe")->find($id_group);
+ 
+            if (is_null($grantambassador)) {
+                $code = 500;
+                $error = true;
+                $message = "The Grant ambassador does not exist";
+            }
+
+            if (is_null($group)) {
+                $code = 500;
+                $error = true;
+                $message = "The Group does not exist";
+            }
+
+            $grantgroup->setGrantAmbassador($grantambassador);     
+            $grantgroup->setGroup($group);                 
+
+            $em->persist($grantgroup);
+            $em->flush();
+  
+ 
+        } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to register the Grant - Error: {$ex->getMessage()}";
+        }
+ 
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $code == 200 ? $grantgroup : $message,
         ];
  
         return new Response($serializer->serialize($response, "json"));
@@ -731,6 +977,115 @@ class GrantController extends FOSRestController
             'code' => $code,
             'error' => $error,
             'data' => $code == 200 ? $grant : $message,
+        ];
+ 
+        return new Response($serializer->serialize($response, "json"));
+    }
+
+    /**
+     * @Rest\Get("/showgroup/{id}.{_format}", name="grant_show_group", defaults={"_format":"json"})
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Gets grant ambassador info based on passed ID parameter."
+     * )
+     *
+     * @SWG\Response(
+     *     response=400,
+     *     description="The grant ambassador with the passed ID parameter was not found or doesn't exist."
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     description="The Grant Ambassador ID"
+     * )
+     *
+     * @SWG\Tag(name="Grant")
+     */
+    public function showGroupAction(Request $request, $id ) {
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $groups = [];
+        $message = "";
+        
+        try {
+            $code = 200;
+            $error = false;
+ 
+            $grant_ambassador_id = $id;
+            $grantgroups = $em->getRepository("App:GrantGroup")->findBy(array("grantambassador" => $grant_ambassador_id));
+            foreach ($grantgroups as $ga) {
+                $groups[]= $ga->getGroup();
+            }
+ 
+        } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to get the current Grant Ambassador- Error: {$ex->getMessage()}";
+        }
+
+        $list = [
+            'groups' => $groups,
+            'grantgroups' => $grantgroups
+        ];
+ 
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $code == 200 ? $list : $message,
+        ];
+ 
+        return new Response($serializer->serialize($response, "json"));
+    }
+
+    /**
+     * @Rest\Post("/ambassadorapplication/{id}.{_format}", name="grant_ambassador_application", defaults={"_format":"json"})
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Gets grant ambassador info based on passed ID parameter."
+     * )
+     *
+     * @SWG\Response(
+     *     response=400,
+     *     description="The grant ambassador with the passed ID parameter was not found or doesn't exist."
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     description="The Grant Ambassador ID"
+     * )
+     *
+     * @SWG\Tag(name="Grant")
+     */
+    public function ambassadorApplicationAction(Request $request, $id ) {
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $grantsambassador = [];
+        $message = "";
+        
+        try {
+            $code = 200;
+            $error = false;
+ 
+            $grant_id = $id;
+            $grantsambassador = $em->getRepository("App:GrantAmbassador")->findBy(array("grant" => $id));
+           
+ 
+        } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to get the current Grant Ambassador- Error: {$ex->getMessage()}";
+        }
+ 
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $code == 200 ? $grantsambassador : $message,
         ];
  
         return new Response($serializer->serialize($response, "json"));

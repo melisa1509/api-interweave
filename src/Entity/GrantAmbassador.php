@@ -67,6 +67,12 @@ class GrantAmbassador
     private $grantupdates;
 
     /**
+    * @ORM\OneToMany(targetEntity="App\Entity\GrantGroup", mappedBy="grantambassador")
+    * @Serializer\Exclude()
+    */
+    private $grantgroups;
+
+    /**
      * @ORM\Column(name="amount", type="integer") 
      */
     protected $amount;
@@ -160,6 +166,7 @@ class GrantAmbassador
     public function __construct()
     {
         $this->grantupdates = new ArrayCollection();
+        $this->grantgroups = new ArrayCollection();
     }
 
 
@@ -433,6 +440,37 @@ class GrantAmbassador
     public function setFile2(string $file2): self
     {
         $this->file2 = $file2;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GrantGroup[]
+     */
+    public function getGrantgroups(): Collection
+    {
+        return $this->grantgroups;
+    }
+
+    public function addGrantgroup(GrantGroup $grantgroup): self
+    {
+        if (!$this->grantgroups->contains($grantgroup)) {
+            $this->grantgroups[] = $grantgroup;
+            $grantgroup->setGrantambassador($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGrantgroup(GrantGroup $grantgroup): self
+    {
+        if ($this->grantgroups->contains($grantgroup)) {
+            $this->grantgroups->removeElement($grantgroup);
+            // set the owning side to null (unless already changed)
+            if ($grantgroup->getGrantambassador() === $this) {
+                $grantgroup->setGrantambassador(null);
+            }
+        }
 
         return $this;
     }
