@@ -1041,6 +1041,57 @@ class GrantController extends FOSRestController
     }
 
     /**
+     * @Rest\Get("/showuser/{id}.{_format}", name="grant_show_user", defaults={"_format":"json"})
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Gets user grant info based on passed ID parameter."
+     * )
+     *
+     * @SWG\Response(
+     *     response=400,
+     *     description="The grant user with the passed ID parameter was not found or doesn't exist."
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     description="The user ID"
+     * )
+     *
+     * @SWG\Tag(name="Grant")
+     */
+    public function showUserAction(Request $request, $id ) {
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $grantgroup = [];
+        $message = "";
+        
+        try {
+            $code = 200;
+            $error = false;
+ 
+            $user_id = $id;
+            $grantgroup = $em->getRepository("App:GrantGroup")->userGrant($user_id);
+           
+ 
+        } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to get the current Grant Ambassador- Error: {$ex->getMessage()}";
+        }
+
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $code == 200 ? $grantgroup : $message,
+        ];
+ 
+        return new Response($serializer->serialize($response, "json"));
+    }
+
+    /**
      * @Rest\Post("/ambassadorapplication/{id}.{_format}", name="grant_ambassador_application", defaults={"_format":"json"})
      *
      * @SWG\Response(

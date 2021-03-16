@@ -35,4 +35,25 @@ class GrantGroupRepository extends ServiceEntityRepository
 
        return $qb->getQuery()->getResult();
     }
+
+
+
+    public function userGrant($user_id)
+    {
+      $query = $this->getEntityManager()
+          ->createQuery( 
+          'SELECT ga, g FROM App:GrantGroup ga
+           JOIN ga.group g
+           JOIN g.studentsgroup sg
+           WHERE sg.student = :option'
+      )->setParameters(array(
+        'option' => $user_id,
+      ));
+
+      try {
+          return $query->getResult();
+      } catch (\Doctrine\ORM\NoResultException $exception) {
+          return null;
+      }
+    }
 }

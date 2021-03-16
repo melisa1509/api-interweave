@@ -67,18 +67,37 @@ class FileController extends FOSRestController
  
         $message = "";
         $file = $request->files->get('file');
+        //$allfiles = $request->files;
 
         try {
             $code = 200;
             $error = false;
 
-            if (!$file->getError()) {
+            if (true) {
+                $zip = new ZipArchive;
+                $createfile = $zip->open('test_folder.zip', ZipArchive::CREATE);
+                //$uploadedFiles=$request->getUploadedFiles();
+                foreach ( $file as $uploadedFile) {
+                        if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+                            $fileName = md5(uniqid()).'.'.$uploadedFile->guessExtension();
+                            $cvDir = $this->container->getparameter('kernel.project_dir').'/web/file';
+                            $file2 = $uploadedFile->move($cvDir, $fileName);
 
+                            if ( $createfile === TRUE)
+                            {
+                                $zip->addFile($uploadedFile->getRealPath(), $fileName);
+                                
+                            }
+                        }
+                    }
+
+                    $zip->close();
+                    
              
-                $fileName = md5(uniqid()).'.'.$file->guessExtension();
-                $cvDir = $this->container->getparameter('kernel.project_dir').'/web/file'.'/' . $fileName;
+                //$fileName = md5(uniqid()).'.'.$file->guessExtension();
+                //$cvDir = $this->container->getparameter('kernel.project_dir').'/web/file'.'/' . $fileName;
 
-                move_uploaded_file($_FILES['file']['tmp_name'],	$cvDir);
+                //move_uploaded_file($file->getRealPath(),	$cvDir);
               
  
                 $message = "The file was uploaded successfully!";

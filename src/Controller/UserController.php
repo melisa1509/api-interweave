@@ -568,13 +568,13 @@ class UserController extends FOSRestController
             if (is_null($user)) {
                 $code = 500;
                 $error = true;
-                $message = "The Course does not exist";
+                $message = "The User does not exist";
             }
  
         } catch (Exception $ex) {
             $code = 500;
             $error = true;
-            $message = "An error has occurred trying to get the current Course- Error: {$ex->getMessage()}";
+            $message = "An error has occurred trying to get the current User- Error: {$ex->getMessage()}";
         }
  
         $response = [
