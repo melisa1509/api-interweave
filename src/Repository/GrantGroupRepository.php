@@ -56,4 +56,23 @@ class GrantGroupRepository extends ServiceEntityRepository
           return null;
       }
     }
+
+    public function grantGroups($grant_id)
+    {
+      $query = $this->getEntityManager()
+          ->createQuery( 
+          'SELECT gp, g FROM App:GrantGroup gp
+           JOIN gp.group g
+           JOIN gp.grantambassador ga
+           WHERE ga.grant = :option'
+      )->setParameters(array(
+        'option' => $grant_id,
+      ));
+
+      try {
+          return $query->getResult();
+      } catch (\Doctrine\ORM\NoResultException $exception) {
+          return null;
+      }
+    }
 }

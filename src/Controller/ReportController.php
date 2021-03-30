@@ -295,6 +295,86 @@ class ReportController extends FOSRestController
       return new Response($serializer->serialize($response, "json"));
   }
 
+  /**
+     * @Rest\Get("/global", name="report_global")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Gets all report."
+     * )  
+     * 
+     * @SWG\Response(
+     *     response=500,
+     *     description="An error has occurred trying to get all ambassador report."
+     * )
+     *     
+     *
+     * @SWG\Tag(name="Report")
+     */
+    public function globalAction(Request $request) {
+      $serializer = $this->get('jms_serializer');
+      $em = $this->getDoctrine()->getManager();
+      $reports = [];
+      $message = "";
+
+      try {
+          $code = 200;
+          $error = false;
+
+          $globalMbs = 0;
+          $globalMbsJr = 0;
+          $globalSa = 0; 
+          $globalParticipants = 0;
+          $globalGroups = 0;
+
+          $role = $request->request->get("role");
+          $id_ambassador = $request->request->get("id");
+
+
+          $mbsNumbers = $em->getRepository('App:Certificate')->findBy(array('program' => 'MBS'));
+          $jrNumbers = $em->getRepository('App:Certificate')->findBy(array('program' => 'JR'));
+          $saNumbers = count($em->getRepository('App:User')->userByRole("ROLE_EMBASSADOR"));
+
+          foreach ($mbsNumbers as $st) {
+          $globalMbs = $globalMbs + (int)$st->getNumber();
+          }
+
+          foreach ($jrNumbers as $st) {
+          $globalMbsJr = $globalMbsJr + (int)$st->getNumber();
+          }
+
+          $globalSa = $saNumbers;
+
+          $globalGroups =  count($em->getRepository("App:Groupe")->findAll());
+
+          $date1 = new \DateTime("2018-12-15");
+          $date2 = new \DateTime('now', (new \DateTimeZone('America/New_York') ) );
+          $diff = $date1->diff($date2);
+
+          $reports = [
+              'global_mbs'          => $globalMbs - $globalMbsJr,
+              'global_mbs_junior'   => $globalMbsJr,
+              'global_sa'           => $globalSa,
+              'global_groups'       => $globalGroups,
+              'date_range'           => $this->getFormat($diff),                  
+          ];
+
+
+      } catch (Exception $ex) {
+          $code = 500;
+          $error = true;
+          $message = "An error has occurred trying to get all report - Error: {$ex->getMessage()}";
+      }
+
+      $response = [
+          'code' => $code,
+          'error' => $error,
+          'data' => $code == 200 ? $reports : $message,
+      ];
+
+      return new Response($serializer->serialize($response, "json"));
+  }
+
    /**
      * @Rest\Post("/ambassadorstatistics", name="ambassador_statistics")
      *

@@ -717,7 +717,7 @@ class CertificateController extends FOSRestController
 
       $student = $em->getRepository('App:User')->find($id);
 
-      $pdf = $this->get('white_october.tcpdf.public')->create('horizontal', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+      $pdf = $this->get('white_october.tcpdf.public')->create(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
       
       $pdf->SetAuthor('Interweave Solutions');
       $pdf->SetTitle(('MBS Certificate'));

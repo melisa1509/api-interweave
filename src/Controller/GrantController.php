@@ -241,7 +241,7 @@ class GrantController extends FOSRestController
             $language = $request->request->get('language');
             $id_user = $request->request->get('id_user');
  
-            $grants = $em->getRepository("App:Grant")->findBy(array("language" => $language ), array("state" => "ASC"));
+            $grants = $em->getRepository("App:Grant")->findBy(array("language" => $language ), array("state" => "ASC", "createdAt" => "DESC"));
 
             foreach ($grants as $grant) {
                 $available = true;

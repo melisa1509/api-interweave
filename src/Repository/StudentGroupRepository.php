@@ -50,7 +50,8 @@ class StudentGroupRepository extends EntityRepository
            JOIN s.group g
            JOIN s.student st
            JOIN st.programmbs p
-           WHERE p.history1 IS NOT NULL'
+           WHERE p.history1 IS NOT NULL
+           ORDER BY p.approvalDate DESC'
       );
 
       try {

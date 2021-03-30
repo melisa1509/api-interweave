@@ -117,6 +117,64 @@ class GrantStatisticController extends FOSRestController
         return new Response($serializer->serialize($response, "json"));
     }
 
+    /**
+     * @Rest\Get("/showgroup/{id}.{_format}", name="grant_statistic_show_group", defaults={"_format":"json"})
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Gets grant ambassador info based on passed ID parameter."
+     * )
+     *
+     * @SWG\Response(
+     *     response=400,
+     *     description="The grant ambassador with the passed ID parameter was not found or doesn't exist."
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="string",
+     *     description="The Grant  ID"
+     * )
+     *
+     * @SWG\Tag(name="GrantStatistic")
+     */
+    public function showGroupAction(Request $request, $id ) {
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $groups = [];
+        $message = "";
+        
+        try {
+            $code = 200;
+            $error = false;
+ 
+            $grant_id = $id;
+            $grantgroups = $em->getRepository("App:GrantGroup")->grantGroups($grant_id);
+            foreach ($grantgroups as $ga) {
+                $groups[]= $ga->getGroup();
+            }
+ 
+        } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to get the current Grant Ambassador- Error: {$ex->getMessage()}";
+        }
+
+        $list = [
+            'groups' => $groups,
+            'grantgroups' => $grantgroups
+        ];
+ 
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $code == 200 ? $list : $message,
+        ];
+ 
+        return new Response($serializer->serialize($response, "json"));
+    }
+
     
  
 }

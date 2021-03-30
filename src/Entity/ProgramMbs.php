@@ -640,6 +640,7 @@ class ProgramMbs
      * @var \DateTime
      *
      * @ORM\Column(name="approval_date", nullable=true, type="date")
+     * @Groups({"student_list", "student_group"})
      */
     private $approvalDate;
 
