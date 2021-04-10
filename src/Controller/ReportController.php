@@ -346,16 +346,18 @@ class ReportController extends FOSRestController
           $globalSa = $saNumbers;
 
           $globalGroups =  count($em->getRepository("App:Groupe")->findAll());
+          $globalCountries = count($mbsNumbers);
 
           $date1 = new \DateTime("2018-12-15");
           $date2 = new \DateTime('now', (new \DateTimeZone('America/New_York') ) );
           $diff = $date1->diff($date2);
 
           $reports = [
-              'global_mbs'          => $globalMbs - $globalMbsJr,
+              'global_mbs'          => $globalMbs + $globalMbsJr,
               'global_mbs_junior'   => $globalMbsJr,
               'global_sa'           => $globalSa,
               'global_groups'       => $globalGroups,
+              'countries'           => $globalCountries,
               'date_range'           => $this->getFormat($diff),                  
           ];
 
