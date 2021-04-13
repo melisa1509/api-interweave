@@ -134,6 +134,62 @@ class GrantAmbassador
     /**
      * @var string
      *
+     * @ORM\Column(name="question8", type="text", nullable=true)
+     */
+    private $question8;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="question9", type="text", nullable=true)
+     */
+    private $question9;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="question10", type="text", nullable=true)
+     */
+    private $question10;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="question11", type="text", nullable=true)
+     */
+    private $question11;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="question12", type="text", nullable=true)
+     */
+    private $question12;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="question13", type="text", nullable=true)
+     */
+    private $question13;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="question14", type="text", nullable=true)
+     */
+    private $question14;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="question15", type="text", nullable=true)
+     */
+    private $question15;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="correction", type="text", nullable=true)
      */
     private $correction;
@@ -151,6 +207,41 @@ class GrantAmbassador
      * @ORM\Column(name="file2", type="string", length=255)
      */
     private $file2;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="file3", type="string", length=255)
+     */
+    private $file3;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="file4", type="string", length=255)
+     */
+    private $file4;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="file5", type="string", length=255)
+     */
+    private $file5;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="file6", type="string", length=255)
+     */
+    private $file6;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="file7", type="string", length=255)
+     */
+    private $file7;
     
 
     /**
@@ -471,6 +562,162 @@ class GrantAmbassador
                 $grantgroup->setGrantambassador(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getQuestion8(): ?string
+    {
+        return $this->question8;
+    }
+
+    public function setQuestion8(?string $question8): self
+    {
+        $this->question8 = $question8;
+
+        return $this;
+    }
+
+    public function getQuestion9(): ?string
+    {
+        return $this->question9;
+    }
+
+    public function setQuestion9(?string $question9): self
+    {
+        $this->question9 = $question9;
+
+        return $this;
+    }
+
+    public function getQuestion10(): ?string
+    {
+        return $this->question10;
+    }
+
+    public function setQuestion10(?string $question10): self
+    {
+        $this->question10 = $question10;
+
+        return $this;
+    }
+
+    public function getQuestion11(): ?string
+    {
+        return $this->question11;
+    }
+
+    public function setQuestion11(?string $question11): self
+    {
+        $this->question11 = $question11;
+
+        return $this;
+    }
+
+    public function getQuestion12(): ?string
+    {
+        return $this->question12;
+    }
+
+    public function setQuestion12(?string $question12): self
+    {
+        $this->question12 = $question12;
+
+        return $this;
+    }
+
+    public function getQuestion13(): ?string
+    {
+        return $this->question13;
+    }
+
+    public function setQuestion13(?string $question13): self
+    {
+        $this->question13 = $question13;
+
+        return $this;
+    }
+
+    public function getQuestion14(): ?string
+    {
+        return $this->question14;
+    }
+
+    public function setQuestion14(?string $question14): self
+    {
+        $this->question14 = $question14;
+
+        return $this;
+    }
+
+    public function getQuestion15(): ?string
+    {
+        return $this->question15;
+    }
+
+    public function setQuestion15(?string $question15): self
+    {
+        $this->question15 = $question15;
+
+        return $this;
+    }
+
+    public function getFile3(): ?string
+    {
+        return $this->file3;
+    }
+
+    public function setFile3(string $file3): self
+    {
+        $this->file3 = $file3;
+
+        return $this;
+    }
+
+    public function getFile4(): ?string
+    {
+        return $this->file4;
+    }
+
+    public function setFile4(string $file4): self
+    {
+        $this->file4 = $file4;
+
+        return $this;
+    }
+
+    public function getFile5(): ?string
+    {
+        return $this->file5;
+    }
+
+    public function setFile5(string $file5): self
+    {
+        $this->file5 = $file5;
+
+        return $this;
+    }
+
+    public function getFile6(): ?string
+    {
+        return $this->file6;
+    }
+
+    public function setFile6(string $file6): self
+    {
+        $this->file6 = $file6;
+
+        return $this;
+    }
+
+    public function getFile7(): ?string
+    {
+        return $this->file7;
+    }
+
+    public function setFile7(string $file7): self
+    {
+        $this->file7 = $file7;
 
         return $this;
     }
