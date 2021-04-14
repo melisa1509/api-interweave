@@ -1270,10 +1270,6 @@ class GrantController extends FOSRestController
                 $form = $this->createForm(GrantType::class, $grant);
                 $form->submit($request->request->all());
 
-                $requestDate = strtotime($request->request->get('date'));
-                $formatDate = date('Y-m-d', $requestDate);
-                $grant->setDate(new \DateTime($formatDate, (new \DateTimeZone('America/New_York'))));              
-
  
                 $em->persist($grant);
                 $em->flush();

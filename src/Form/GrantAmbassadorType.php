@@ -17,10 +17,10 @@ class GrantAmbassadorType extends AbstractType
     ->add('file')
     ->add('file2')
     ->add('file3')
-    ->add('file2')
-    ->add('file2')
-    ->add('file2')
-    ->add('file2')
+    ->add('file4')
+    ->add('file5')
+    ->add('file6')
+    ->add('file7')
     ->add('question1')
     ->add('question2')
     ->add('question3')
@@ -33,6 +33,7 @@ class GrantAmbassadorType extends AbstractType
     ->add('question10')
     ->add('question11')
     ->add('question12')
+    ->add('question13')
     ;
      
   }
