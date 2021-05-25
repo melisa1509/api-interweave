@@ -34,6 +34,8 @@ class GrantAmbassadorType extends AbstractType
     ->add('question11')
     ->add('question12')
     ->add('question13')
+    ->add('question14')
+    ->add('question15')
     ;
      
   }

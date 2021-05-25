@@ -45,7 +45,9 @@ class ProgramMbsType extends AbstractType
               ->add('promotion2')
               ->add('promotion3')
               ->add('promotion4')
-              ->add('promotion5')              
+              ->add('promotion5')
+              ->add('promotion6')
+              ->add('promotion7')              
               ->add('quality_p1')
               ->add('quality_p2')
               ->add('quality_p3')
@@ -78,6 +80,10 @@ class ProgramMbsType extends AbstractType
               ->add('service6')
               ->add('history1')
               ->add('history2')
+              ->add('productName')
+              ->add('productDescription')
+              ->add('productPhone')
+              ->add('productWeb')                
               ;
     
   }

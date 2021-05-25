@@ -61,6 +61,25 @@ class StudentGroupRepository extends EntityRepository
       }
   }
 
+  public function videoPromotionStatement()
+  {
+      $query = $this->getEntityManager()
+          ->createQuery(
+          'SELECT s, g FROM App:StudentGroup s
+           JOIN s.group g
+           JOIN s.student st
+           JOIN st.programmbs p
+           WHERE p.promotion6 IS NOT NULL
+           ORDER BY p.updatedAt DESC'
+      );
+
+      try {
+          return $query->getResult();
+      } catch (\Doctrine\ORM\NoResultException $exception) {
+          return null;
+      }
+  }
+
   public function studentMbsByState($state)
   {
     $query = $this->getEntityManager()

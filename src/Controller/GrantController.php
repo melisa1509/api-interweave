@@ -814,8 +814,9 @@ class GrantController extends FOSRestController
         $message = "";
         $id_grant = $request->request->get('id_grant');
         $id_ambassador = $request->request->get('id_ambassador');
+        $id = $request->request->get('id');
 
-        $grantambassador = $em->getRepository("App:GrantAmbassador")->findOneBy(array("grant" => $id_grant, "ambassador" => $id_ambassador));
+        $grantambassador = $em->getRepository("App:GrantAmbassador")->find($id);
         if (is_null($grantambassador) ) {
             $grantambassador=new GrantAmbassador();
         }
@@ -846,8 +847,10 @@ class GrantController extends FOSRestController
             }
 
             $grantambassador->setGrant($grant); 
-            $grantambassador->setAmbassador($ambassador);             
-            $grantambassador->setState("state.development");     
+            $grantambassador->setAmbassador($ambassador); 
+            if($grantambassador->getState() != "state.revision"){
+                $grantambassador->setState("state.development");
+            }            
             $grantambassador->setAmount(0);  
             $grantambassador->setCorrection(" ");             
 

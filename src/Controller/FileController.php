@@ -214,6 +214,7 @@ class FileController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $grant = [];
         $message = "";
+        $title = "";
         
         try {
             $code = 200;
@@ -265,11 +266,18 @@ class FileController extends FOSRestController
             // set text shadow effect
             $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
 
+            if($ga->getGrant()->getType() == "state.scholarship"){
+                $title = "Scholarship Grant Application";
+            }
+            else{
+                $title = "Start Up Grant Application";
+            }
+
             // Set some content to print
             $html ='
             <br/><br/>
-            <span style="text-align:center;"><h2>Grant Application<h2/><h5>'.$ga->getGrant()->getTitle().'<h5/></span>
-            <span style="text-align:center;"><h5><h5/></span>
+            <span style="text-align:center;"><h2>'.$title.'<h2/><h5>'.$ga->getGrant()->getTitle().'<h5/></span>
+            <span style="text-align:center;"><h5>'." ". '<h5/></span>
            
             <table style="border-collapse:collapse;border-color:#ccc;border-spacing:0" class="tg">
             <thead>
@@ -317,15 +325,15 @@ class FileController extends FOSRestController
             </tr>
             <tr style="line-height: 34px;">
             <td style="background-color:#fff;border-color:#ccc;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
-            No. Participants Trained
+            Country
             </td>
             <td style="background-color:#fff;border-color:#ccc;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
-            '.$ga->getNumber().'
+            '.$this->getParameter($this->getParameter($ga->getAmbassador()->getCountry())).'
             </td>
             </tr>
             <tr style="line-height: 34px;">
             <td style="background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
-            Total Amount Sought from Interweave
+            Total Amount looking to receive from Interweave
             </td>
             <td style="background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
             '.$ga->getQuestion6().'
@@ -340,8 +348,8 @@ class FileController extends FOSRestController
 
             // Set some content to print
             $html2 ='
+            <span style="text-align:center;"><h5>History:<h5/></span>
             <table style="border-collapse:collapse;border-color:#ccc;border-spacing:0" class="tg">
-
             <tbody>
             <tr style="line-height: 20px;">
             <td style="background-color:#fff;border-color:#c0c0c0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
@@ -349,12 +357,12 @@ class FileController extends FOSRestController
             </tr>
             <tr style="line-height: 20px;">
             <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
-            In the space below, please give a brief history of your time as a Success Ambassador (tell us about the MBS groups you have facilitated so far including the number of participants and graduates, previous grants received from Interweave, etc.) :
+            How many groups has you trained? 
             </td>
             </tr>
             <tr style="line-height: 34px;">
             <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
-            '.$ga->getQuestion1().'
+            '.$ga->getQuestion3().'
             </td>
             </tr>
             <tr style="line-height: 20px;">
@@ -363,12 +371,12 @@ class FileController extends FOSRestController
             </tr>
             <tr style="line-height: 20px;">
             <td style="background-color:#f0f0f0;border-color:#f0f0f0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
-            In the space below, please explain your need for Interweave’s Scholarship Grant, (including a summary of your efforts to find funding from the sources listed in the introductory letter):
+            How many MBS graduates do have in total?
             </td>
             </tr>
             <tr style="line-height: 34px;">
             <td style="background-color:#f0f0f0;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
-            '.$ga->getQuestion2().'
+            '.$ga->getQuestion4().'
             </td>
             </tr>
             <tr style="line-height: 20px;">
@@ -377,12 +385,12 @@ class FileController extends FOSRestController
             </tr>
             <tr style="line-height: 20px;">
             <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
-            How much will participants contribute for their own participation? :
+            How many months have your been a Success Ambassador?
             </td>
             </tr>
             <tr style="line-height: 34px;">
             <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
-            '.$ga->getQuestion4().'
+            '.$ga->getQuestion5().'
             </td>
             </tr>
             <tr style="line-height: 20px;">
@@ -391,21 +399,372 @@ class FileController extends FOSRestController
             </tr>
             <tr style="line-height: 20px;">
             <td style="background-color:#f0f0f0;border-color:#f0f0f0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
-            What other sources of funding do you have and how much will they contribute? (Partnerships or contracts):
+            How many Success Ambassadors have you trained?
             </td>
             </tr>
             <tr style="line-height: 34px;">
             <td style="background-color:#f0f0f0;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
-            '.$ga->getQuestion5().'
+            '.$ga->getQuestion7().'
             </td>
             </tr>
             </tbody>
             </table>
-            <br>
+
+            <br><br>
+            <span style="text-align:center;"><h5>Present Need:<h5/></span>
+            <table style="border-collapse:collapse;border-color:#ccc;border-spacing:0" class="tg">
+            <tbody>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#c0c0c0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            Are you an active SA? 
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion12().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0fa;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0f0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            How many total participants will this grant train?
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#f0f0f0;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getNumber().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#c0c0c0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            What is the TOTAL financial cost to offer this training? (Bldg, transportation, electricity, etc.)
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion8().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0fa;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0f0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            How much will participants contribute of their own money, in USD? 
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#f0f0f0;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion9().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#c0c0c0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            How much will other organizations contribute of their own resources, in USD? (Estimated dollar amount if they are providing the training facility, recruiting, etc. )
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion10().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0fa;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0f0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            What is the total amount is USD you are looking to receive from Interweave Solutions?
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#f0f0f0;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion6().'
+            </td>
+            </tr>
+            </tbody>
+            </table>
+            <br><br>
+
+            <span style="text-align:center;"><h5>Future Impact:<h5/></span>
+            <table style="border-collapse:collapse;border-color:#ccc;border-spacing:0" class="tg">
+            <tbody>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#c0c0c0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            Is it a hard to serve area? 
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion11().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0fa;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0f0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            What is the potential impact? Trained participants
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#f0f0f0;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion13().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#c0c0c0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            How will this grant help the Success Ambassador get more groups in the future/ improve their business?
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion14().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0fa;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            </tbody>
+            </table>
             ';
 
+            // Set some content to print
+            $html5 ='
+            <span style="text-align:center;"><h5>History:<h5/></span>
+            <table style="border-collapse:collapse;border-color:#ccc;border-spacing:0" class="tg">
+            <tbody>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#c0c0c0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            How many groups has you trained? 
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion3().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0fa;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0f0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            How many MBS graduates do have in total?
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#f0f0f0;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion4().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#c0c0c0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            How many months have your been a Success Ambassador?
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion5().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0fa;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0f0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            How many Success Ambassadors have you trained?
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#f0f0f0;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion7().'
+            </td>
+            </tr>
+            </tbody>
+            </table>
+
+            <br><br>
+            <span style="text-align:center;"><h5>Present Need:<h5/></span>
+            <table style="border-collapse:collapse;border-color:#ccc;border-spacing:0" class="tg">
+            <tbody>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#c0c0c0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            Are you an active SA? 
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion12().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0fa;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0f0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            Building / Rent:
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#f0f0f0;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion8().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#c0c0c0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            Legal / Registration Fees:
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion9().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0fa;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0f0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            Transportation:
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#f0f0f0;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion10().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#c0c0c0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            Printing Fees:
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion11().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0fa;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0f0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            Other (If you asked for money for OTHER please specify what the money)
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#f0f0f0;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion13().'
+            </td>
+            </tr>
+            </tbody>
+            </table>
+            <br><br>
+
+            <span style="text-align:center;"><h5>Future Impact:<h5/></span>
+            <table style="border-collapse:collapse;border-color:#ccc;border-spacing:0" class="tg">
+            <tbody>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#c0c0c0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0fa;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0f0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            What is the potential impact? Trained participants
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#f0f0f0;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getNumber().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#c0c0c0;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            How will this grant help the Success Ambassador get more groups in the future/ improve their business?
+            </td>
+            </tr>
+            <tr style="line-height: 34px;">
+            <td style="background-color:#fff;border-color:#fff;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:normal;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            '.$ga->getQuestion15().'
+            </td>
+            </tr>
+            <tr style="line-height: 20px;">
+            <td style="background-color:#f0f0f0;border-color:#f0f0fa;border-style:solid;border-width:0px;color:#333;font-family:Arial, sans-serif;font-size:10px;font-weight:bold;overflow:hidden;padding:9px 19px;text-align:left;vertical-align:middle;word-break:normal">
+            </td>
+            </tr>
+            </tbody>
+            </table>
+            ';
+
+            $content = "";
+            if($ga->getGrant()->getType() == "state.scholarship"){
+                $content = $html2;
+            }
+            else{
+                $content = $html5;
+            }
+
             // Print text using writeHTMLCell()
-            $pdf->writeHTMLCell(0, 0, '', '', $html2, 0, 1, 0, true, '', true);
+            $pdf->writeHTMLCell(0, 0, '', '', $content, 0, 1, 0, true, '', true);
 
             $html3 = '';
 
@@ -415,6 +774,22 @@ class FileController extends FOSRestController
 
             if($ga->getFile2() != "undefined"){
                 $html3 = $html3. '<p><a target="_blank" href="https://api.interweavesolutions.org/web/file/'.$ga->getFile2().'" style="text-decoration:none; color:black; font-size:10px;" >Download Video 2</a></p>';
+            }
+
+            if($ga->getFile3() != "undefined"){
+                $html3 = $html3. '<p><a  target="_blank" href="https://api.interweavesolutions.org/web/file/'.$ga->getFile3().'" style="text-decoration:none; color:black; font-size:10px;" >Download 6Ps checklist File</a></p>';
+            }
+
+            if($ga->getFile4() != "undefined"){
+                $html3 = $html3. '<p><a  target="_blank" href="https://api.interweavesolutions.org/web/file/'.$ga->getFile4().'" style="text-decoration:none; color:black; font-size:10px;" >Download 6 month Cash Flow Projection File</a></p>';
+            }
+
+            if($ga->getFile5() != "undefined"){
+                $html3 = $html3. '<p><a  target="_blank" href="https://api.interweavesolutions.org/web/file/'.$ga->getFile5().'" style="text-decoration:none; color:black; font-size:10px;" >Download Income Statement File</a></p>';
+            }
+
+            if($ga->getFile6() != "undefined"){
+                $html3 = $html3. '<p><a  target="_blank" href="http://api.interweavesolutions.org/web/file/'.$ga->getFile6().'" style="text-decoration:none; color:black; font-size:10px;" >Download Income and Expense Log File</a></p>';
             }
 
             // Print text using writeHTMLCell()

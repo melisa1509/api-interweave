@@ -290,14 +290,14 @@ class StudentController extends FOSRestController
             $error = false;
 
             if (is_null($group)) {
-                $code = 500;
+                $code = 700;
                 $error = true;
                 $message = "The group does not exist";
             }
             else if(! is_null($student)){
-                $code = 500;
+                $code = 600;
                 $error = true;
-                $message = "The student already exist";
+                $message = $student;
             }
             else{
 
@@ -598,13 +598,11 @@ class StudentController extends FOSRestController
                                 if( $programSa->getMision2() )              { $mision = $mision + 25; }
                                 if( $programSa->getMision3() )              { $mision = $mision + 25; }
                                 if( $programSa->getMision4() )              { $mision = $mision + 25; }
-                                if( $programSa->getgenerateGroups1() )           { $generate = $generate + 14; }
-                                if( $programSa->getgenerateGroups2() )           { $generate = $generate + 14; }
-                                if( $programSa->getgenerateGroups3() )           { $generate = $generate + 14; }
-                                if( $programSa->getgenerateGroups4() )           { $generate = $generate + 14; }
-                                if( $programSa->getgenerateGroups5() )           { $generate = $generate + 14; }
-                                if( $programSa->getgenerateGroups6() )           { $generate = $generate + 14; }
-                                if( $programSa->getgenerateGroups7() )           { $generate = $generate + 16; }
+                                if( $programSa->getgenerateGroups1() )           { $generate = $generate + 20; }
+                                if( $programSa->getgenerateGroups2() )           { $generate = $generate + 20; }
+                                if( $programSa->getgenerateGroups3() )           { $generate = $generate + 20; }
+                                if( $programSa->getgenerateGroups4() )           { $generate = $generate + 20; }
+                                if( $programSa->getgenerateGroups5() )           { $generate = $generate + 20; }
                                 if( $programSa->getRule1() )           { $facilitate = $facilitate + 10; }
                                 if( $programSa->getRule2() )           { $facilitate = $facilitate + 10; }
                                 if( $programSa->getRule3() )           { $facilitate = $facilitate + 10; }
@@ -619,9 +617,10 @@ class StudentController extends FOSRestController
                                 if( $programSa->getGraduate2() )             { $graduate = $graduate + 25; }
                                 if( $programSa->getGraduate3() )             { $graduate = $graduate + 25; }
                                 if( $programSa->getGraduate4() )             { $graduate = $graduate + 25; }                              
-                                if( $programSa->getSupport1() )             { $support = $support + 33; }
-                                if( $programSa->getSupport2() )             { $support = $support + 33; }
-                                if( $programSa->getSupport3() )             { $support = $support + 34; }
+                                if( $programSa->getSupport1() )             { $support = $support + 25; }
+                                if( $programSa->getSupport2() )             { $support = $support + 25; }
+                                if( $programSa->getSupport3() )             { $support = $support + 25; }
+                                if( $programSa->getSupport4() )             { $support = $support + 25; }
                                
 
                                 $progressSa[] = array(
@@ -881,13 +880,11 @@ class StudentController extends FOSRestController
                                 if( $programSa->getMision2() )              { $mision = $mision + 25; }
                                 if( $programSa->getMision3() )              { $mision = $mision + 25; }
                                 if( $programSa->getMision4() )              { $mision = $mision + 25; }
-                                if( $programSa->getgenerateGroups1() )           { $generate = $generate + 14; }
-                                if( $programSa->getgenerateGroups2() )           { $generate = $generate + 14; }
-                                if( $programSa->getgenerateGroups3() )           { $generate = $generate + 14; }
-                                if( $programSa->getgenerateGroups4() )           { $generate = $generate + 14; }
-                                if( $programSa->getgenerateGroups5() )           { $generate = $generate + 14; }
-                                if( $programSa->getgenerateGroups6() )           { $generate = $generate + 14; }
-                                if( $programSa->getgenerateGroups7() )           { $generate = $generate + 16; }
+                                if( $programSa->getgenerateGroups1() )           { $generate = $generate + 20; }
+                                if( $programSa->getgenerateGroups2() )           { $generate = $generate + 20; }
+                                if( $programSa->getgenerateGroups3() )           { $generate = $generate + 20; }
+                                if( $programSa->getgenerateGroups4() )           { $generate = $generate + 20; }
+                                if( $programSa->getgenerateGroups5() )           { $generate = $generate + 20; }
                                 if( $programSa->getRule1() )           { $facilitate = $facilitate + 10; }
                                 if( $programSa->getRule2() )           { $facilitate = $facilitate + 10; }
                                 if( $programSa->getRule3() )           { $facilitate = $facilitate + 10; }
@@ -902,9 +899,10 @@ class StudentController extends FOSRestController
                                 if( $programSa->getGraduate2() )             { $graduate = $graduate + 25; }
                                 if( $programSa->getGraduate3() )             { $graduate = $graduate + 25; }
                                 if( $programSa->getGraduate4() )             { $graduate = $graduate + 25; }                              
-                                if( $programSa->getSupport1() )             { $support = $support + 33; }
-                                if( $programSa->getSupport2() )             { $support = $support + 33; }
-                                if( $programSa->getSupport3() )             { $support = $support + 34; }
+                                if( $programSa->getSupport1() )             { $support = $support + 25; }
+                                if( $programSa->getSupport2() )             { $support = $support + 25; }
+                                if( $programSa->getSupport3() )             { $support = $support + 25; }
+                                if( $programSa->getSupport4() )             { $support = $support + 25; }
                                
                                 $total = $mision + $generate + $facilitate + $graduate + $support;
                                 if($total == 500){
@@ -1667,6 +1665,50 @@ class StudentController extends FOSRestController
             else if($role == 'ROLE_EMBASSADOR' or $role == 'ROLE_STUDENT_EMBASSADOR'){
                 $students = $em->getRepository('App:StudentGroup')->successStoryByEmbassador($id);
             }
+          
+ 
+        } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to get all SuccessStory - Error: {$ex->getMessage()}";
+        }
+ 
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $code == 200 ? $students : $message,
+        ];
+ 
+        return new Response($serializer->serialize($response, "json", SerializationContext::create()->setGroups(array("student_group"))));
+    }
+
+    /**
+     * @Rest\Post("/videopromotion", name="video_promotion_statement")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Gets all available video promotion."
+     * )
+     *
+     * @SWG\Response(
+     *     response=500,
+     *     description="An error has occurred trying to get all videos promotion."
+     * )
+     *
+     *
+     * @SWG\Tag(name="Student")
+     */
+    public function videoPromotionAction(Request $request) {
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $students = [];
+        $message = "";
+ 
+        try {
+            $code = 200;
+            $error = false;
+
+            $students = $em->getRepository('App:StudentGroup')->videoPromotionStatement();
           
  
         } catch (Exception $ex) {

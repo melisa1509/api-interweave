@@ -116,14 +116,8 @@ class ProgramsaController extends FOSRestController
                 $form = $this->createForm(ProgramSaType::class, $programsa);
                 $form->submit($request->request->all());
                 
-                $generateGroups1 = explode(',', $request->request->get('generateGroups1'));
-                $programsa->setGenerateGroups1($generateGroups1);
                 $generateGroups3 = explode(',', $request->request->get('generateGroups3'));
                 $programsa->setGenerateGroups3($generateGroups3);  
-                $generateGroups5 = explode(',', $request->request->get('generateGroups5'));
-                $programsa->setGenerateGroups5($generateGroups5);
-                $rule9 = explode(',', $request->request->get('rule9'));
-                $programsa->setRule9($rule9); 
 
                 $programsa->setState("state.development");
                 
@@ -142,15 +136,10 @@ class ProgramsaController extends FOSRestController
                 $programsa->setStudent($student);
 
                 $programsa->setPaperwork3([""]);
-                $generateGroups1 = explode(',', $request->request->get('generateGroups1'));
-                $programsa->setGenerateGroups1($generateGroups1);
+              
                 $generateGroups3 = explode(',', $request->request->get('generateGroups3'));
                 $programsa->setGenerateGroups3($generateGroups3);  
-                $generateGroups5 = explode(',', $request->request->get('generateGroups5'));
-                $programsa->setGenerateGroups5($generateGroups5);
-                $rule9 = explode(',', $request->request->get('rule9'));
-
-                $programsa->setRule9($rule9); 
+              
                 $programsa->setState("state.development");
                 
  
@@ -268,16 +257,10 @@ class ProgramsaController extends FOSRestController
                 $form = $this->createForm(ProgramSaType::class, $programsa);
                 $form->submit($request->request->all());
                 
-                $generateGroups1 = explode(',', $request->request->get('generateGroups1'));
-                $programsa->setGenerateGroups1($generateGroups1);
+             
                 $generateGroups3 = explode(',', $request->request->get('generateGroups3'));
                 $programsa->setGenerateGroups3($generateGroups3);  
-                $rule9 = explode(',', $request->request->get('rule9'));
-                $generateGroups5 = explode(',', $request->request->get('generateGroups5'));
-                $programsa->setGenerateGroups5($generateGroups5);
-                $programsa->setRule9($rule9);           
-                
- 
+               
                 $em->persist($programsa);
                 $em->flush();
  

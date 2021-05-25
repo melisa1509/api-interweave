@@ -185,6 +185,21 @@ class ProgramMbs
     /**
      * @var string
      *
+     * @ORM\Column(name="promotion6", type="text", nullable=true)
+     */
+    private $promotion6;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="promotion7", type="text", nullable=true)
+     * @Groups({"student_group"})
+     */
+    private $promotion7;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="paperwork1", type="text", nullable=true)
      */
     private $paperwork1;
@@ -3075,5 +3090,29 @@ class ProgramMbs
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
+    }
+
+    public function getPromotion6(): ?string
+    {
+        return $this->promotion6;
+    }
+
+    public function setPromotion6(?string $promotion6): self
+    {
+        $this->promotion6 = $promotion6;
+
+        return $this;
+    }
+
+    public function getPromotion7(): ?string
+    {
+        return $this->promotion7;
+    }
+
+    public function setPromotion7(?string $promotion7): self
+    {
+        $this->promotion7 = $promotion7;
+
+        return $this;
     }
 }

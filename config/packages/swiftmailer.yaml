@@ -1,10 +1,10 @@
 swiftmailer:
     transport:        smtp
-    username:         platform.interweavesolutions
-    password:         23t465209KJHLKJlgrjoiu543
-    host:             mail.tesrack.com
-    port:             465
-    encryption:       ssl
+    username:         Interweave Solutions
+    password:         U7srKWKYNJ_L_kEyWH-f1g
+    host:             smtp.mandrillapp.com
+    port:             587
+    encryption:       tls
     auth-mode:        login
     spool: { type: 'memory' }
     stream_options:

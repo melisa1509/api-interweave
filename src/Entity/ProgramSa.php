@@ -481,9 +481,9 @@ class ProgramSa
     /**
      * @var string
      *
-     * @ORM\Column(name="generateGroups1", type="json_array")
+     * @ORM\Column(name="generateGroups1", type="text", nullable=true)
      */
-    private $generateGroups1 = array();
+    private $generateGroups1;
 
     /**
      * @var string
@@ -509,9 +509,9 @@ class ProgramSa
     /**
      * @var string
      *
-     * @ORM\Column(name="generateGroups5", type="json_array")
+     * @ORM\Column(name="generateGroups5", type="text", nullable=true)
      */
-    private $generateGroups5 = array();
+    private $generateGroups5;
 
     /**
      * @var string
@@ -587,9 +587,9 @@ class ProgramSa
     /**
      * @var string
      *
-     * @ORM\Column(name="rule9", type="json_array")
+     * @ORM\Column(name="rule9", type="text", nullable=true)
      */
-    private $rule9 = array();
+    private $rule9;
 
     /**
      * @var string
@@ -653,6 +653,13 @@ class ProgramSa
      * @ORM\Column(name="support3", type="text", nullable=true)
      */
     private $support3;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="support4", type="text", nullable=true)
+     */
+    private $support4;
 
 
 
@@ -3947,6 +3954,30 @@ class ProgramSa
     public function getRule9()
     {
         return $this->rule9;
+    }
+
+    /**
+     * Set support4
+     *
+     * @param string $support4
+     *
+     * @return ProgramSa
+     */
+    public function setSupport4($support4)
+    {
+        $this->support4 = $support4;
+
+        return $this;
+    }
+
+    /**
+     * Get support4
+     *
+     * @return string
+     */
+    public function getSupport4()
+    {
+        return $this->support4;
     }
 
     
