@@ -705,9 +705,6 @@ class StudentController extends FOSRestController
 
                 $programMbs = $em->getRepository('App:ProgramMbs')->findOneBy(array( 'student' => $student->getId() ));
 
-             
-
-                
                 $plan = 0;
                 $product = 0;
                 $process = 0;

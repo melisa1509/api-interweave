@@ -113,6 +113,7 @@ class ProgrammbsController extends FOSRestController
             $programmbs = $em->getRepository('App:ProgramMbs')->findOneBy(array('student' => $request->request->get('id_student')));
  
             if (!is_null($programmbs)) {
+                $progressOrigin = $this->mbsProgress($programmbs);
                 $form = $this->createForm(ProgramMbsType::class, $programmbs);
                 $form->submit($request->request->all());
                 
@@ -129,9 +130,16 @@ class ProgrammbsController extends FOSRestController
 
                 $programmbs->setState("state.development");
                 
- 
-                $em->persist($programmbs);
-                $em->flush();
+                if($this->mbsProgress($programmbs) >= $progressOrigin ){
+                    $em->persist($programmbs);
+                    $em->flush();
+                }
+                else{
+                    $code = 500;
+                    $error = true;
+                    $message = "An error has occurred trying to edit the programmbs";
+                }
+                              
  
             } else {
                 $student = $em->getRepository('App:User')->find($request->request->get('id_student'));
@@ -586,6 +594,7 @@ class ProgrammbsController extends FOSRestController
             $programmbs = $em->getRepository('App:ProgramMbs')->find($id);
  
             if (!is_null($programmbs)) {
+                $progressOrigin = $this->mbsProgress($programmbs);
                 $form = $this->createForm(ProgramMbsType::class, $programmbs);
                 $form->submit($request->request->all());
                 
@@ -601,8 +610,15 @@ class ProgrammbsController extends FOSRestController
                 $programmbs->setPaperwork8(json_decode($programmbs->getPaperwork8()));
                 
  
-                $em->persist($programmbs);
-                $em->flush();
+                if($this->mbsProgress($programmbs) >= $progressOrigin ){
+                    $em->persist($programmbs);
+                    $em->flush();
+                }
+                else{
+                    $code = 500;
+                    $error = true;
+                    $message = "An error has occurred trying to edit the programmbs";
+                }
  
             } else {
                 $code = 500;
@@ -1032,6 +1048,79 @@ class ProgrammbsController extends FOSRestController
         }
   
         return $number->getNumber();
+    }
+
+    
+
+    public function mbsProgress($programMbs){
+
+        $plan = 0;
+        $product = 0;
+        $process = 0;
+        $promotion = 0;
+        $paperwork = 0;
+        $price = 0;
+        $service = 0;
+        $quality = 0;
+
+        $paperwork4 = json_decode(json_encode($programMbs->getPaperwork4()), true);
+        $paperwork5 = json_decode(json_encode($programMbs->getPaperwork5()), true);
+        $paperwork6 = json_decode(json_encode($programMbs->getPaperwork6()), true);
+        $paperwork7 = json_decode(json_encode($programMbs->getPaperwork7()), true);
+        $paperwork8 = json_decode(json_encode($programMbs->getPaperwork8()), true);
+
+        if( $programMbs->getPlan1() )              { $plan = $plan + 50; }
+        if( $programMbs->getPlan2() )              { $plan = $plan + 50; }
+        if( $programMbs->getProduct1() )           { $product = $product + 14; }
+        if( $programMbs->getProduct2() )           { $product = $product + 14; }
+        if( $programMbs->getProduct3() )           { $product = $product + 14; }
+        if( $programMbs->getProduct4() )           { $product = $product + 14; }
+        if( $programMbs->getProduct5() )           { $product = $product + 14; }
+        if( $programMbs->getProduct6() )           { $product = $product + 14; }
+        if( $programMbs->getProduct7() )           { $product = $product + 16; }
+        if( $programMbs->getProcess1()[0] != "" )  { $process = $process + 25; }
+        if( $programMbs->getProcess2() )           { $process = $process + 25; }
+        if( $programMbs->getProcess3() )           { $process = $process + 25; }
+        if( $programMbs->getProcess4() )           { $process = $process + 25; }
+        if( $programMbs->getPrice1() )             { $price = $price + 25; }
+        if( $programMbs->getPrice2() )             { $price = $price + 25; }
+        if( $programMbs->getPrice3() )             { $price = $price + 25; }
+        if( $programMbs->getPrice4() )             { $price = $price + 25; }
+        if( $programMbs->getPaperwork1() )         { $paperwork = $paperwork + 14; }
+        if( $programMbs->getPaperwork3()[0] != "" )      { $paperwork = $paperwork + 14; }
+        if( $paperwork4['p4_balance']  != "" )     { $paperwork = $paperwork + 14; }
+        if( $paperwork5['p5_income']   != "" )       { $paperwork = $paperwork + 14; }
+        if( $paperwork6['p6_balance']  != "" )      { $paperwork = $paperwork + 14; }
+        if( $paperwork7['p7_income'][0]   != "" )       { $paperwork = $paperwork + 14; }
+        if( $paperwork8['p8_balance'][0]  != "" )      { $paperwork = $paperwork + 16; }
+        if( $programMbs->getService1() )             { $service = $service + 20; }
+        if( $programMbs->getService2() )             { $service = $service + 20; }
+        if( $programMbs->getService3() )             { $service = $service + 20; }
+        if( $programMbs->getService4() )             { $service = $service + 20; }
+        if( $programMbs->getService5() )             { $service = $service + 20; }
+        if( $programMbs->getPromotion1() )           { $promotion = $promotion + 25; }
+        if( $programMbs->getPromotion2() )           { $promotion = $promotion + 25; }
+        if( $programMbs->getPromotion3() )           { $promotion = $promotion + 25; }
+        if( $programMbs->getPromotion4() )           { $promotion = $promotion + 25; }
+        if( $programMbs->getQualityP1() )            { $quality = $quality + 6; }
+        if( $programMbs->getQualityP2() )            { $quality = $quality + 6; }
+        if( $programMbs->getQualityP3() )            { $quality = $quality + 6; }
+        if( $programMbs->getQualityP4() )            { $quality = $quality + 6; }
+        if( $programMbs->getQualityP5() )            { $quality = $quality + 6; }
+        if( $programMbs->getQualityP6() )            { $quality = $quality + 6; }
+        if( $programMbs->getQualityP7() )            { $quality = $quality + 6; }
+        if( $programMbs->getQualityP8() )            { $quality = $quality + 6; }
+        if( $programMbs->getQualityG1() )            { $quality = $quality + 6; }
+        if( $programMbs->getQualityG2() )            { $quality = $quality + 6; }
+        if( $programMbs->getQualityG3() )            { $quality = $quality + 6; }
+        if( $programMbs->getQualityG4() )            { $quality = $quality + 6; }
+        if( $programMbs->getQualityG5() )            { $quality = $quality + 6; }
+        if( $programMbs->getQualityG6() )            { $quality = $quality + 6; }
+        if( $programMbs->getQualityG7() )            { $quality = $quality + 6; }
+        if( $programMbs->getQualityG8() )            { $quality = $quality + 10; }
+
+        return $plan + $product + $process +  $promotion +  $paperwork +  $price +  $service + $quality = 0;
+
     }
 
     public function sendEmail($subject, $student){
