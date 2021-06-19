@@ -19,32 +19,22 @@ class GrantAmbassadorRepository extends ServiceEntityRepository
         parent::__construct($registry, GrantAmbassador::class);
     }
 
-    // /**
-    //  * @return GrantAmbassador[] Returns an array of GrantAmbassador objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function ambassadorGrant($user_id)
     {
-        return $this->createQueryBuilder('g')
-            ->andWhere('g.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('g.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+      $query = $this->getEntityManager()
+          ->createQuery( 
+          'SELECT ga FROM App:GrantAmbassador ga
+           WHERE ga.ambassador = :option
+           AND ga.state = :state'
+      )->setParameters(array(
+        'option' => $user_id,
+        'state'  => "state.approved"
+       ));
 
-    /*
-    public function findOneBySomeField($value): ?GrantAmbassador
-    {
-        return $this->createQueryBuilder('g')
-            ->andWhere('g.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+      try {
+          return $query->getResult();
+      } catch (\Doctrine\ORM\NoResultException $exception) {
+          return null;
+      }
     }
-    */
 }

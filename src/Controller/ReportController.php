@@ -187,6 +187,71 @@ class ReportController extends FOSRestController
       return new Response($serializer->serialize($response, "json"));
   }
 
+  /**
+     * @Rest\Post("/group/daterange", name="report_group_date_range")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Gets data range groups reports"
+     * )
+     *
+     * @SWG\Response(
+     *     response=500,
+     *     description="An error has occurred trying to get all ambassador report."
+     * )
+     *
+     * @SWG\Parameter(
+     *     name="start_date",
+     *     in="path",
+     *     type="string",
+     *     description="The start date"
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="final_date",
+     *     in="path",
+     *     type="string",
+     *     description="The final date"
+     * )
+     *
+     *
+     * @SWG\Tag(name="Report")
+     */
+    public function groupDateRangeAction(Request $request) {
+      $serializer = $this->get('jms_serializer');
+      $em = $this->getDoctrine()->getManager();
+      $reports = [];
+      $message = "";
+
+      try {
+          $code = 200;
+          $error = false;
+
+          $start_date = $request->request->get("start_date");
+          $final_date = $request->request->get("final_date");
+
+          $until = new \DateTime();
+          $interval = new \DateInterval('P2M');//2 months
+          $from = $until->sub($interval);
+          $mm =  'from' . $from->format('Y-m-d') . 'until' . $until->format('Y-m-d');
+          
+
+      } catch (Exception $ex) {
+          $code = 500;
+          $error = true;
+          $message = "An error has occurred trying to get all report - Error: {$ex->getMessage()}";
+      }
+
+      $response = [
+          'code' => $code,
+          'error' => $error,
+          'data' => $code == 200 ? $mm : $message,
+      ];
+
+      return new Response($serializer->serialize($response, "json"));
+  }
+
+
     /**
      * @Rest\Post("/globalnumbers", name="global_numbers")
      *

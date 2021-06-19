@@ -131,6 +131,9 @@ class ProgrammbsController extends FOSRestController
                 $programmbs->setState("state.development");
                 
                 if($this->mbsProgress($programmbs) >= $progressOrigin ){
+                    if($this->mbsProgress($programmbs) == 800){
+                        $programmbs->setState("state.revision");
+                    }
                     $em->persist($programmbs);
                     $em->flush();
                 }
@@ -611,6 +614,9 @@ class ProgrammbsController extends FOSRestController
                 
  
                 if($this->mbsProgress($programmbs) >= $progressOrigin ){
+                    if($this->mbsProgress($programmbs) == 800){
+                        $programmbs->setState("state.revision");
+                    }
                     $em->persist($programmbs);
                     $em->flush();
                 }
@@ -633,7 +639,7 @@ class ProgrammbsController extends FOSRestController
         }
  
         $response = [
-            'code' => $code,
+            'code' => $this->mbsProgress($programmbs),
             'error' => $error,
             'data' => $code == 200 ? $programmbs : $message,
         ];
@@ -1119,7 +1125,7 @@ class ProgrammbsController extends FOSRestController
         if( $programMbs->getQualityG7() )            { $quality = $quality + 6; }
         if( $programMbs->getQualityG8() )            { $quality = $quality + 10; }
 
-        return $plan + $product + $process +  $promotion +  $paperwork +  $price +  $service + $quality = 0;
+        return $plan + $product + $process +  $promotion +  $paperwork +  $price +  $service + $quality ;
 
     }
 
@@ -1234,6 +1240,113 @@ class ProgrammbsController extends FOSRestController
   
             }
       }
+
+      /**
+     * @Rest\Put("/approvedlist", name="approved_programmbs_list")
+     *
+     * @SWG\Response(
+     *     response=201,
+     *     description="Project mbs approval was successful"
+     * )
+     *
+     * @SWG\Response(
+     *     response=500,
+     *     description="Project mbs was not successfully approved"
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="list",
+     *     in="body",
+     *     type="string",
+     *     description="The array id programmbs",
+     *     schema={}
+     * )
+     * @SWG\Tag(name="Programmbs")
+     */
+
+    public function approvedListAction(Request $request)
+    {
+
+        $serializer = $this->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $programMb = [];
+        $message = ""; 
+
+        try {
+            $code = 200;
+            $error = false;
+            $list = explode(',', $request->request->get('list'));
+
+            foreach ($list as $key) {
+
+                $programMb = $em->getRepository('App:ProgramMbs')->findOneBy(array('student' => $key));
+                $student = $em->getRepository('App:User')->find($key);
+
+                if (!is_null($student)) {
+
+                    if (!is_null($programMb) ) {
+                        $em = $this->getDoctrine()->getManager();
+
+                        if($programMb->getState() != "state.approved"){
+
+                            $programMb->setState('state.approved');
+                            $programMb->setApprovalDate(new \DateTime('now', (new \DateTimeZone('America/New_York'))));
+                            if(!$programMb->getCode()){
+                                if($programMb->getStudent()->getStudentGroup()->getGroup()->getProgram() == "option.program4"){
+                                    $programMb->setCode($programMb->getStudent()->getCountry()."-".$this->getNumberCodeJr($programMb, $request));
+                                } 
+                                else{
+                                    $programMb->setCode($programMb->getStudent()->getCountry()."-".$this->getNumberCode($programMb, $request));
+                                }                   
+                            }
+            
+                            $em->persist($programMb);
+                            $em->flush();
+                            //$this->sendEmail("subject.approved_project", $programMb->getStudent());
+
+                        }
+                        
+        
+                    } else {
+                        
+                        $programmbs=new Programmbs();
+                        $programmbs->setStudent($student);
+                        $programmbs->setModality("option.modality1");
+                        $programmbs->setApprovalDate(new \DateTime('now', (new \DateTimeZone('America/New_York')))); 
+        
+                        $programmbs->setState("state.approved");
+                        //$this->sendEmail("subject.pending_revision", $programmbs->getStudent());
+                        $programmbs->setProcess1([""]);
+                        $programmbs->setPaperwork3([""]);
+                        $programmbs->setPaperwork4([""]);
+                        $programmbs->setPaperwork5([""]);
+                        $programmbs->setPaperwork6([""]);
+                        $programmbs->setPaperwork7([""]);
+                        $programmbs->setPaperwork8([""]);
+                        $em->persist($programmbs);
+                        $em->flush();
+                    }
+
+                }
+            }
+            
+ 
+            
+ 
+        } catch (Exception $ex) {
+            $code = 500;
+            $error = true;
+            $message = "An error has occurred trying to edit the programmbs - Error: {$ex->getMessage()}";
+        }
+ 
+        $response = [
+            'code' => $code,
+            'error' => $error,
+            'data' => $code == 200 ? $list : $message,
+        ];
+ 
+        return new Response($serializer->serialize($response, "json"));
+    }
 
    
  

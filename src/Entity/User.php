@@ -63,6 +63,13 @@ class User implements UserInterface
      */
     private $languageGrader = array();
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="message", type="json_array", nullable=true)
+     */
+    private $message = array();
+
      /**
      * @var string
      *
@@ -94,6 +101,13 @@ class User implements UserInterface
      * @Groups({"student_list"})
      */
     private $city;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="picture", type="string", nullable=true,  length=255)
+     */
+    private $picture;
 
     /**
      * @var string
@@ -680,6 +694,30 @@ class User implements UserInterface
                 $grantupdate->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMessage(): ?array
+    {
+        return $this->message;
+    }
+
+    public function setMessage(?array $message): self
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?string $picture): self
+    {
+        $this->picture = $picture;
 
         return $this;
     }

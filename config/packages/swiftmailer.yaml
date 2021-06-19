@@ -1,6 +1,6 @@
 swiftmailer:
     transport:        smtp
-    username:         Interweave Solutions
+    username:         info@interweavesolutions.co
     password:         U7srKWKYNJ_L_kEyWH-f1g
     host:             smtp.mandrillapp.com
     port:             587

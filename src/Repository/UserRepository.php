@@ -125,6 +125,50 @@ class UserRepository extends EntityRepository
     *
     * @return array
     */
+    public function getAdminsLanguageMessage($language, $type_message)
+    {
+       $qb = $this->_em->createQueryBuilder();
+       $qb->select('u')
+           ->from('App:User', 'u')
+           ->where('u.roles = :role')
+           ->andWhere('u.languageGrader LIKE :language')
+           ->andWhere('u.message LIKE        :message')
+           ->setParameters(array(
+             'role'         => '["ROLE_LANGUAGE_ADMIN"]',
+             'language'     => '%'.$language.'%',
+             'message'      => '%'.$type_message.'%',
+           ))
+           ->orderBy('u.firstName', 'ASC');
+
+       return $qb->getQuery()->getResult();
+    }
+
+    /**
+    * @param string $role
+    *
+    * @return array
+    */
+    public function getAdminsMessage($language, $type_message)
+    {
+       $qb = $this->_em->createQueryBuilder();
+       $qb->select('u')
+           ->from('App:User', 'u')
+           ->where('u.roles = :role')
+           ->andWhere('u.message LIKE        :message')
+           ->setParameters(array(
+             'role'         => '["ROLE_ADMIN"]',
+             'message'      => '%'.$type_message.'%',
+           ))
+           ->orderBy('u.firstName', 'ASC');
+
+       return $qb->getQuery()->getResult();
+    }
+
+    /**
+    * @param string $role
+    *
+    * @return array
+    */
     public function userByRole($role)
     {
        $qb = $this->_em->createQueryBuilder();

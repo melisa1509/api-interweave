@@ -217,6 +217,7 @@ class AdminController extends FOSRestController
         $form=$this->createForm(AdminType::class, $admin);
         $form->submit($request->request->all());
         $language_grader = explode(',', $request->request->get('language_grader'));
+        $message = explode(',', $request->request->get('message'));
         $user = $em->getRepository('App:User')->findOneBy(array('username' => $admin->getUsername()));
  
         try {
@@ -235,6 +236,7 @@ class AdminController extends FOSRestController
                 $admin->setPassword($encoder->encodePassword($admin, $password));
                 $admin->setRoles(array($admin->getRoles()));
                 $admin->setLanguageGrader($language_grader);
+                $admin->setMessage($message);
     
                 $em->persist($admin);
                 $em->flush();
@@ -349,12 +351,14 @@ class AdminController extends FOSRestController
             $error = false;
             $admin = $em->getRepository("App:User")->find($id);
             $language_grader = explode(',', $request->request->get('language_grader'));
+            $message = explode(',', $request->request->get('message'));
  
             if (!is_null($admin)) {
                 $form = $this->createForm(AdminType::class, $admin);
                 $form->submit($request->request->all());
                 $admin->setRoles(array($admin->getRoles()));
                 $admin->setLanguageGrader($language_grader);
+                $admin->setMessage($message);
  
                 $em->persist($admin);
                 $em->flush();

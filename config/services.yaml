@@ -491,6 +491,75 @@ parameters:
     subject.created_group_pr:   SA PLATFORM - New Group Created
     message.created_group_pr:   The following ambassador has created a group
 
+    subject.new_group_en:               A new Group has been created
+    subject.new_story_en:               A new Success Story has been created
+    subject.new_ambassador_en:          A new Ambassador has been registered
+    subject.new_participant_en:         A new Participant has been registered
+    subject.new_application_en:         A new Grant application has been created
+    subject.new_mbs_project_en:         A new MBS Project is pending review 
+    subject.mbs_approved_en:            A MBS project has been approved
+    subject.grant_approved_en:          Your grant application has been approved
+    subject.grant_update_en:            Your grant application is pending for updates
+    subject.mbs_correction_en:          Your MBS project has pending corrections
+    message.new_mbs_project_en:         A MBS project belonging to
+    message.pending_review_en:          is pending review
+    message.new_participant_en:         has been registered in the following group
+    message.new_group_en:               has created a new group with the following name
+    message.mbs_approved_en:            A new MBS Project has been approved with the following code
+    message.grant_update_en:            Your Grant Application require an urgent action, Please go to  MyPlatform to Grant Section -> My Applications -> Updates and complete the section "Groups created because of this Grant".
+
+    subject.new_group_es:               A new Group has been created
+    subject.new_story_es:               A new Success Story has been created
+    subject.new_ambassador_es:          A new Ambassador has been registered
+    subject.new_participant_es:         A new Participant has been registered
+    subject.new_application_es:         A new Grant application has been created
+    subject.new_mbs_project_es:         A new MBS Project is pending review 
+    subject.mbs_approved_es:            A MBS project has been approved
+    subject.grant_approved_es:          Your grant application has been approved
+    subject.grant_update_es:            Your grant application is pending for updates
+    subject.mbs_correction_es:          Your MBS project has pending corrections
+    message.new_mbs_project_es:         A MBS project belonging to
+    message.pending_review_es:          is pending review
+    message.new_participant_es:         has been registered in the following group
+    message.new_group_es:               has created a new group with the following name
+    message.mbs_approved_es:            A new MBS Project has been approved with the following code
+    message.grant_update_es:            Your Grant Application require an urgent action, Please go to  MyPlatform to Grant Section -> My Applications -> Updates and complete the section "Groups created because of this Grant".
+
+    subject.new_group_fr:               A new Group has been created
+    subject.new_story_fr:               A new Success Story has been created
+    subject.new_ambassador_fr:          A new Ambassador has been registered
+    subject.new_participant_fr:         A new Participant has been registered
+    subject.new_application_fr:         A new Grant application has been created
+    subject.new_mbs_project_fr:         A new MBS Project is pending review 
+    subject.mbs_approved_fr:            A MBS project has been approved
+    subject.grant_approved_fr:          Your grant application has been approved
+    subject.grant_update_fr:            Your grant application is pending for updates
+    subject.mbs_correction_fr:          Your MBS project has pending corrections
+    message.new_mbs_project_fr:         A MBS project belonging to
+    message.pending_review_fr:          is pending review
+    message.new_participant_fr:         has been registered in the following group
+    message.new_group_fr:               has created a new group with the following name
+    message.mbs_approved_fr:            A new MBS Project has been approved with the following code
+    message.grant_update_fr:            Your Grant Application require an urgent action, Please go to  MyPlatform to Grant Section -> My Applications -> Updates and complete the section "Groups created because of this Grant".
+
+    subject.new_group_pt:               A new Group has been created
+    subject.new_story_pt:               A new Success Story has been created
+    subject.new_ambassador_pt:          A new Ambassador has been registered
+    subject.new_participant_pt:         A new Participant has been registered
+    subject.new_application_pt:         A new Grant application has been created
+    subject.new_mbs_project_pt:         A new MBS Project is pending review 
+    subject.mbs_approved_pt:            A MBS project has been approved
+    subject.grant_approved_pt:          Your grant application has been approved
+    subject.grant_update_pt:            Your grant application is pending for updates
+    subject.mbs_correction_pt:          Your MBS project has pending corrections
+    message.new_mbs_project_pt:         A MBS project belonging to
+    message.pending_review_pt:          is pending review
+    message.new_participant_pt:         has been registered in the following group
+    message.new_group_pt:               has created a new group with the following name
+    message.mbs_approved_pt:            A new MBS Project has been approved with the following code
+    message.grant_update_pt:            Your Grant Application require an urgent action, Please go to  MyPlatform to Grant Section -> My Applications -> Updates and complete the section "Groups created because of this Grant".
+
+
 
 
 

@@ -66,10 +66,15 @@ class GrantStatisticController extends FOSRestController
                 $total_grant_participants = 0;
                 $total_grant_applications = count($grantsambassador);
                 foreach ($grantsambassador as $ga) {
+                    $participants = 0;
                     $grantgroups = $em->getRepository("App:GrantGroup")->findBy(array("grantambassador" => $ga->getId()));
                     $total_grant_groups = $total_grant_groups + count($grantgroups);
                     $total_grant_amount = $total_grant_amount + $ga->getAmount();
-                    $total_grant_participants = $total_grant_participants + $ga->getNumber();
+                    foreach ($grantgroups as $gr) {
+                        $studentGroups = $em->getRepository("App:StudentGroup")->findBy(array("group" => $gr->getGroup()->getId())); 
+                        $participants = $participants + count($studentGroups);
+                    }
+                    $total_grant_participants = $total_grant_participants + $participants;
                 }
                 $grant = [
                     "id" => $gt->getId(),

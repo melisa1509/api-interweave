@@ -241,6 +241,8 @@ class GroupController extends FOSRestController
 
             $group->setNumberStudents(0);
 
+            //$this->sendMessageList($ambassador->getLanguage(), $group);
+
             $em->persist($group);
             $em->flush();
   
@@ -252,7 +254,7 @@ class GroupController extends FOSRestController
         }
  
         $response = [
-            'code' => $code,
+            'code' => $list,
             'error' => $error,
             'data' => $code == 200 ? $group : $message,
         ];
@@ -562,7 +564,42 @@ class GroupController extends FOSRestController
         ];
  
         return new Response($serializer->serialize($response, "json", SerializationContext::create()->setGroups(array('group_list'))));
-    }  
+    }
+
+    public function sendMessageList($language, $group){
+
+        $em = $this->getDoctrine()->getManager();
+
+        $admins = $em->getRepository("App:User")->getAdminsMessage($language, "group");
+        $languageadmins = $em->getRepository("App:User")->getAdminsLanguageMessage($language, "group");
+
+        foreach ($admins as $admin) {
+            $message = $admin->getFirstName()." ".$admin->getFirstName()." ".$this->getParameter("message.new_group_en")." ".$group->getName();
+            $this->sendEmail($admin, "subject.new_group", $message );
+        }
+
+        foreach ($languageadmins as $admin) {
+            $message = $admin->getFirstName()." ".$admin->getFirstName()." ".$this->getParameter("message.new_group_en")." ".$group->getName();
+            $this->sendEmail($admin, "subject.new_group", $message );
+        }
+        return $admins;
+
+    }
+    
+    public function sendEmail($user, $subject, $message){
+
+        $subject = $this->getParameter($subject."_".$user->getLanguage());
+        $subjectEmail = $subject;
+        $bodyEmail = $message;
+
+        $message = (new \Swift_Message($subjectEmail))
+         ->setFrom('MyPlatform@interweavesolutions.co')
+         ->setTo($user->getUsername())
+         ->setBody($bodyEmail);
+
+         $this->get('mailer')->send($message);
+
+    }
 
    
  

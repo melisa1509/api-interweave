@@ -760,7 +760,7 @@ class StudentController extends FOSRestController
                                 if( $programMbs->getQualityP7() )            { $quality = $quality + 6; }
                                 if( $programMbs->getQualityP8() )            { $quality = $quality + 6; }
                                 if( $programMbs->getQualityG1() )            { $quality = $quality + 6; }
-                                if( $programMbs->getQualityG2() )            { $quality = $quality + 6; }
+                                if( $programMbs->getQualityG2() )            { $quality = $quality + 6; } 
                                 if( $programMbs->getQualityG3() )            { $quality = $quality + 6; }
                                 if( $programMbs->getQualityG4() )            { $quality = $quality + 6; }
                                 if( $programMbs->getQualityG5() )            { $quality = $quality + 6; }
