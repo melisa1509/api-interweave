@@ -186,6 +186,7 @@ class ProgramMbs
      * @var string
      *
      * @ORM\Column(name="promotion6", type="text", nullable=true)
+     * @Groups({"student_group"})
      */
     private $promotion6;
 

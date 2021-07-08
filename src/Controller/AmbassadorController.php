@@ -330,7 +330,7 @@ class AmbassadorController extends FOSRestController
             $ambassador = $em->getRepository("App:User")->find($id);
  
             if (!is_null($ambassador)) {
-                $form = $this->createForm(AmbassadorType::class, $ambassador);
+                $form = $this->createForm(AmbassadorEditType::class, $ambassador);
                 $form->submit($request->request->all());
                 //$ambassador->setName($name);
  

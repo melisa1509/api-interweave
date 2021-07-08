@@ -224,27 +224,30 @@ class GroupController extends FOSRestController
                 $error = true;
                 $message = "The Ambassador does not exist";
             }
+            else{
+                $group->setEmbassador($ambassador);
 
-            $group->setEmbassador($ambassador);
+                $requestFinalDate = strtotime($request->request->get('finalDate'));
+                $formatFinalDate = date('Y-m-d', $requestFinalDate);
+                $group->setFinalDate(new \DateTime($formatFinalDate, (new \DateTimeZone('America/New_York'))));
 
-            $requestFinalDate = strtotime($request->request->get('finalDate'));
-            $formatFinalDate = date('Y-m-d', $requestFinalDate);
-            $group->setFinalDate(new \DateTime($formatFinalDate, (new \DateTimeZone('America/New_York'))));
+                $requestStartDate = strtotime($request->request->get('startDate'));
+                $formatStartDate = date('Y-m-d', $requestStartDate);
+                $group->setStartDate(new \DateTime($formatStartDate, (new \DateTimeZone('America/New_York'))));
 
-            $requestStartDate = strtotime($request->request->get('startDate'));
-            $formatStartDate = date('Y-m-d', $requestStartDate);
-            $group->setStartDate(new \DateTime($formatStartDate, (new \DateTimeZone('America/New_York'))));
+                $requestGraduationDate = strtotime($request->request->get('graduationDate'));
+                $formatGraduationDate = date('Y-m-d', $requestGraduationDate);
+                $group->setGraduationDate(new \DateTime($formatGraduationDate, (new \DateTimeZone('America/New_York'))));
 
-            $requestGraduationDate = strtotime($request->request->get('graduationDate'));
-            $formatGraduationDate = date('Y-m-d', $requestGraduationDate);
-            $group->setGraduationDate(new \DateTime($formatGraduationDate, (new \DateTimeZone('America/New_York'))));
+                $group->setNumberStudents(0);
 
-            $group->setNumberStudents(0);
+                $this->sendMessageList($ambassador, $group);
 
-            //$this->sendMessageList($ambassador->getLanguage(), $group);
+                $em->persist($group);
+                $em->flush();
+            }
 
-            $em->persist($group);
-            $em->flush();
+            
   
  
         } catch (Exception $ex) {
@@ -566,20 +569,20 @@ class GroupController extends FOSRestController
         return new Response($serializer->serialize($response, "json", SerializationContext::create()->setGroups(array('group_list'))));
     }
 
-    public function sendMessageList($language, $group){
+    public function sendMessageList($ambassador, $group){
 
         $em = $this->getDoctrine()->getManager();
 
-        $admins = $em->getRepository("App:User")->getAdminsMessage($language, "group");
-        $languageadmins = $em->getRepository("App:User")->getAdminsLanguageMessage($language, "group");
+        $admins = $em->getRepository("App:User")->getAdminsMessage($ambassador->getLanguage(), "group");
+        $languageadmins = $em->getRepository("App:User")->getAdminsLanguageMessage($ambassador->getLanguage(), "group");
 
         foreach ($admins as $admin) {
-            $message = $admin->getFirstName()." ".$admin->getFirstName()." ".$this->getParameter("message.new_group_en")." ".$group->getName();
+            $message = $ambassador->getFirstName()." ".$ambassador->getLastName()." ".$this->getParameter("message.new_group_".$ambassador->getLanguage())." ".$group->getName();
             $this->sendEmail($admin, "subject.new_group", $message );
         }
 
         foreach ($languageadmins as $admin) {
-            $message = $admin->getFirstName()." ".$admin->getFirstName()." ".$this->getParameter("message.new_group_en")." ".$group->getName();
+            $message = $ambassador->getFirstName()." ".$ambassador->getLastName()." ".$this->getParameter("message.new_group_".$ambassador->getLanguage())." ".$group->getName();
             $this->sendEmail($admin, "subject.new_group", $message );
         }
         return $admins;

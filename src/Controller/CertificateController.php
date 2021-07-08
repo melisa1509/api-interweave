@@ -1091,7 +1091,7 @@ class CertificateController extends FOSRestController
                 <th colspan="8" align="right" style="color:black;text-align:center;font-weight:bold;font-size:30pt;height:273pt;"></th>
             </tr>
             <tr>
-                <th colspan="8" align="center" style="color:black;text-align:center;font-weight:bold;font-size:30pt;height:135pt;">'.ucwords(mb_strtolower($student->getStudent()->getFirstName().' '.$student->getStudent()->getLastName(),'UTF-8')).'</th>
+                <th colspan="8" align="center" style="color:black;text-align:center;font-weight:bold;font-size:30pt;height:135pt;">Madeleinis Rodríguez Padilla</th>
             </tr>
             <tr>
                 <td  align="center" width="13%"></td>
@@ -1125,6 +1125,9 @@ class CertificateController extends FOSRestController
           
           $img_file = $this->container->getparameter('kernel.project_dir').'/web/img/'.$student->getStudent()->getLanguage().'_attendance.png';
           $pdf->Image($img_file, 0, 0, 279, 216, '', '', '', false, 600, '', false, false, 0);
+
+          $img_logo = $this->container->getparameter('kernel.project_dir').'/web/file/'.$student->getStudent()->getStudentGroup()->getGroup()->getNameImage();
+          $pdf->Image($img_logo, 196, 170, '', 24, '', '', '', false, 600, '', false, false, 0);
 
           
 
@@ -1187,6 +1190,9 @@ class CertificateController extends FOSRestController
           
           $img_file = $this->container->getparameter('kernel.project_dir').'/web/img/'.$student->getStudent()->getLanguage().'_attendance.png';
           $pdf->Image($img_file, 0, 0, 279, 216, '', '', '', false, 600, '', false, false, 0);
+
+          $img_logo = $this->container->getparameter('kernel.project_dir').'/web/file/'.$student->getStudent()->getStudentGroup()->getGroup()->getNameImage();
+          $pdf->Image($img_logo, 196, 170, '', 24, '', '', '', false, 600, '', false, false, 0);
 
           
 

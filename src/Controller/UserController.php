@@ -663,7 +663,7 @@ class UserController extends FOSRestController
         //$bodyEmail = "http://localhost:3000/user/newpassword/".$user->getId();
 
         $message = (new \Swift_Message($subjectEmail))
-         ->setFrom('myplatform@interweavesolutions.com')
+         ->setFrom('MyPlatform@interweavesolutions.co')
          ->setTo($user->getUsername())
          ->setBody($bodyEmail);
 
